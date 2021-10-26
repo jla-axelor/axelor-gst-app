@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+	
+	<cards name="party_card" model="com.axelor.gst.db.Party" title="Parties List">
+		<field name="refrence" />
+		<field name="name" />
+		<field name="type" />
+		<field name="customer" />
+		<field name="supplier" />
+		<field name="gstin" />
+		
+		<template>
+			<![CDATA[
+				<div class="span-4">
+					<strong>refrence</strong>
+					<strong>name</strong>
+					<strong>type</strong>
+					<strong>customer</strong>
+					<strong>supplier</strong>
+					<strong>gstin</strong>
+				</div> 
+			]]>
+		</template>
+	</cards>
+	
+	<grid model="com.axelor.gst.db.Party" title="Parties" name="party_grid">
+		<field name="refrence" />
+		<field name="name" />
+		<field name="type" />
+		<field name="customer" />
+		<field name="supplier" />
+		<field name="gstin" />
+	</grid>
+	
+	<form model="com.axelor.gst.db.Party" title="Party" name="party_form">
+		<panel name="mainPanel">
+			<field name="refrence" />
+			<field name="name" />
+			<field name="type" />
+			<field name="customer" />
+			<field name="supplier" />
+			<field name="gstin" />
+			
+			<field name="contact" widget="editor" />
+			<field name="address" widget="editor" />				
+		</panel>
+	</form>
+	
+</object-views>

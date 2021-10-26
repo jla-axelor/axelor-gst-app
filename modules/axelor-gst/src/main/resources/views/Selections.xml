@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+  
+	<selection name="gst-party-type">
+		<option value="1">Individual</option>
+		<option value="2">Company</option>
+	</selection>
+
+	<selection name="gst-contact-type">
+		<option value="1">Primary</option>
+		<option value="2">Secondary</option>
+		<option value="3">Others</option>
+	</selection>
+	
+	<selection name="gst-address-type">
+		<option value="1">Default</option>
+		<option value="2">Invoice</option>
+		<option value="3">Shipping</option>
+		<option value="4">Other</option>
+	</selection>
+	
+	<selection name="gst-bankAccount-type">
+		<option value="1">Saving</option>
+		<option value="2">Current</option>
+	</selection>
+	
+	<selection name="gst-invoice-status">
+		<option value="1">Draft</option>
+		<option value="2">Validate</option>
+		<option value="3">Paid</option>
+		<option value="4">Cancelled</option>
+		
+	</selection>
+</object-views>
