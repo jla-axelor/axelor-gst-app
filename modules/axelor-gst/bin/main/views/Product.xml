@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+  
+  	<cards name="product_card" model="com.axelor.gst.db.Product" title="Products">
+  		<field name="name" />
+		<field name="image" />
+		<field name="code" />
+		<field name="HSBN" />
+		<field name="category" />
+		<template>
+			<![CDATA[
+				<img ng-src="{{$image('image')}}">
+				<strong>{{name}}</strong>
+				<strong>{{code}}</strong>
+				<strong>{{HSBN}}</strong>
+				<strong>{{category}}</strong>
+			]]>
+		</template>
+  	</cards>
+	
+	<grid model="com.axelor.gst.db.Product" title="Products" name="product_grid">
+		<field name="name" />
+		<field name="image" />
+		<field name="code" />
+		<field name="HSBN" />
+		<field name="category" />
+		<field name="salePrice" />
+		<field name="costPrice" />
+		<field name="gstRate" />
+	</grid>
+	
+	<form model="com.axelor.gst.db.Product" title="Product" name="product_from">
+		<panel name="mainPanel">
+			<field name="name" />
+			<field name="image" widget="Image"/>
+			<field name="code" />
+			<field name="HSBN" />
+			<field name="category" onChange="action-onchange-category-gstrate" />
+			<field name="salePrice" />
+			<field name="costPrice" />
+			<field name="gstRate" />
+		</panel>
+	</form>
+	
+	<action-record name="action-onchange-category-gstrate" model="com.axelor.gst.db.Product" >
+		<field name="gstRate" expr="eval: category.gstRate"/>
+	</action-record>
+	
+</object-views>

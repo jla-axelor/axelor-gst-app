@@ -6,13 +6,13 @@
 		<module package="com.axelor.gst.db" name="gst"/>
 		<entity name="Invoice">
 			<string name="status" readonly="true" selection="gst-invoice-status" />
-			<string name="refrence" />
+			<string name="refrence"  readonly="true"/>
 
 			<datetime name="invoiceDate" />
 
 			<integer name="priority" />
 
-			<boolean name="useInvoiceAddressASShippingAddress" default="true" title="Use Invoice address as shipping address" />
+			<boolean name="useInvoiceAddressAsShippingAddress" default="true" title="Use Invoice address as shipping address" />
 
 			<many-to-one ref="com.axelor.gst.db.Company" name="company" required="true" />
 			<many-to-one ref="com.axelor.gst.db.Party" name="party" />
@@ -20,12 +20,13 @@
 			<many-to-one ref="com.axelor.gst.db.Address" name="invoiceAddress" />
 			<many-to-one ref="com.axelor.gst.db.Address" name="shippingAddress" />
 			
-			
 			<decimal name="netAmmount" readonly="true" />
 			<decimal name="netIGST" readonly="true" />
 			<decimal name="netCSGT" readonly="true" />
 			<decimal name="netSGST" readonly="true" />
 			<decimal name="grossAmount" readonly="true" />
+			
+			<one-to-many ref="com.axelor.gst.db.InvoiceLine" name="invoiceItem" mappedBy="invoice"/>
 		</entity>
 		
 		<entity name="InvoiceLine">
@@ -43,6 +44,8 @@
 			<decimal name="SGST" readonly="true" />
 			<decimal name="CGST" readonly="true" />
 			<decimal name="grossAmount" readonly="true" />
+			
+			<many-to-one ref="com.axelor.gst.db.Invoice" name="invoice" />
 						
 		</entity>
 

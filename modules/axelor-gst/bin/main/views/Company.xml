@@ -12,11 +12,22 @@
 	
 	<form model="com.axelor.gst.db.Company" title="Company" name="company_form">
 		<panel name="mainPanel">
+			<field name="logo" title="Logo" widget="Image" colSpan="12" />
 			<field name="name" />
-			<field name="logo" />
-			<panel-related field="contact" name="contact" />
+<!-- 			<panel-related field="contact" name="contact"  /> -->
 			<field name="gstin" />
-			<panel-related field="bankDetails" name="bankDetails" />
+			<spacer colSpan="12"/>
+			<field name="contact" colSpan="12">
+				<editor>
+			  		<field name="name" />
+			  		<field name="type" />
+			  		<field name="primeryEmail" />
+			  		<field name="secondaryEmail" />
+			  		<field name="primeryPhone" />
+			  		<field name="secondaryPhone" />
+				</editor>
+			</field>
+			<panel-related field="bankDetails" name="bankDetails" colSpan="12"/>
 			<field name="address" />
 		</panel>
 	</form>	

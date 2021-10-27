@@ -10,7 +10,7 @@
 			<string name="code" required="true" />
 			<string name="HSBN" />
 			
-			<many-to-one ref="ProductCategory" name="category" />
+			<many-to-one ref="com.axelor.gst.db.ProductCategory" name="category" />
 			
 			<decimal name="salePrice" />
 			<decimal name="costPrice" />

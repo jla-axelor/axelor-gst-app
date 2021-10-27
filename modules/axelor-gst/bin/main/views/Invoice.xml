@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+  
+  	<kanban columnBy="status" model="com.axelor.gst.db.Invoice" sequenceBy="priority" title="Invoice" name="invoice_kanban">
+  		<field name="refrence" />
+		<field name="invoiceDate" />
+		<field name="company" />
+		<field name="party" />
+		<field name="grossAmount" />
+		
+		<template>
+			<![CDATA[
+				<strong>refrence</strong>
+				<strong>invoiceDate</strong>
+				<strong>company</strong>
+				<strong>party</strong>
+				<strong>grossAmount</strong>
+			]]>
+		</template>
+  	</kanban>
+	
+	<grid model="com.axelor.gst.db.Invoice" title="Invoices" name="invoice_grid">
+		<field name="refrence" />
+		<field name="status" />
+		<field name="invoiceDate" />
+		<field name="company" />
+		<field name="party" />
+		<field name="grossAmount" />
+	</grid>
+	
+	<form model="com.axelor.gst.db.Invoice" title="Invoice" name="invoice_form" onNew="action-on-new-date-time,action-one-new-default-company">
+	<panel name="mainPanel1">
+	
+		<field name="refrence" />
+		<field name="status" widget="NavSelect" />
+		<field name="invoiceDate" />
+		<field name="useInvoiceAddressAsShippingAddress" />
+		<field name="company" />
+		<field name="party" />
+		<field name="partyContact" />
+		<field name="invoiceAddress" />
+		<field name="shippingAddress" />
+	</panel>
+	
+	<panel name="mainPanel2">
+		<field name="netAmmount" />
+		<field name="netIGST" />
+		<field name="netCSGT" />
+		<field name="netSGST" />
+		<field name="grossAmount" />
+	</panel>
+	
+	<panel name="invoiceLinePanle">
+		<panel-related field="invoiceItem" />
+	</panel>
+	
+	<panel name="sidePanel" sidebar="true">
+		<button onClick="action-click-draft" name="draft" title="Draft"/>
+	</panel>
+	</form>
+	<action-record name="action-on-new-date-time" model="com.axelor.gst.db.Invoice">
+		<field name="invoiceDate" expr="eval: __date__"/>
+	</action-record>
+	
+	<action-record name="action-click-draft" model="com.axelor.gst.db.Invoice">
+		<field name="status" expr="eval: 1"/>
+	</action-record>
+	
+	<action-record name="action-one-new-default-company" model="com.axelor.gst.db.Invoice">
+ 		<field name="company" expr="__repo__(company).all.filter"/> 
+	</action-record>
+</object-views>

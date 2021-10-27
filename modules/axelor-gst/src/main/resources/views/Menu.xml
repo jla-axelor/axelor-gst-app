@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+	
+	<menuitem title="Party" name="party-root" icon="fa-book" icon-background="red" />
+	
+	<menuitem title="Party" name="party-root-party" parent="party-root" action="action-party-root-party"/>
+	<action-view name="action-party-root-party" title="Party" model="com.axelor.gst.db.Party">
+		<view type="cards" name="party_card"/>
+		<view type="grid" name="party_grid"/>
+		<view type="form" name="party_form"/>
+	</action-view>
+	
+	<menuitem title="Contact" name="party-root-contact" parent="party-root" action="action-party-root-contact"/>
+	<action-view name="action-party-root-contact" title="Contact" model="com.axelor.gst.db.Contact">
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+	
+	
+	<menuitem title="Configurations" name="party-root-configurations" parent="party-root" />
+	
+	<menuitem title="Address" name="party-root-configurations-address" parent="party-root-configurations" action="action-configurations-address"/>
+	<action-view name="action-configurations-address" title="Address" model="com.axelor.gst.db.Address">
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+	
+	<menuitem title="City" name="party-root-configurations-city" parent="party-root-configurations" action="action-configurations-city"/>
+		<action-view name="action-configurations-city" title="City" model="com.axelor.gst.db.City">
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+	
+	<menuitem title="State" name="party-root-configurations-state" parent="party-root-configurations" action="action-configurations-state"/>
+	<action-view name="action-configurations-state" title="State" model="com.axelor.gst.db.State">
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+	
+	<menuitem title="Country" name="party-root-configurations-country" parent="party-root-configurations" action="action-configurations-country"/>
+	<action-view name="action-configurations-country" title="Country" model="com.axelor.gst.db.Country">
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+	
+	
+	<menuitem title="Product" name="product-root" icon="fa-product-hunt" icon-background="blue" />
+	
+	<menuitem title="Product" name="product-root-product" parent="product-root" action="action-product-root-product"/>
+	<action-view name="action-product-root-product" title="Product" model="com.axelor.gst.db.Product">
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+	
+	<menuitem title="Product Category" name="product-root-product-category" parent="product-root" action="action-product-root-product-category"/>
+	<action-view name="action-product-root-product-category" title="Product Category" model="com.axelor.gst.db.ProductCategory">
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+
+	
+	<menuitem title="Invoice" name="invoice-root"/>
+	
+	<menuitem title="Create invoice" name="invoice-root-invoice" parent="invoice-root" action="action-invoice-root-create-invoice"/>
+	<action-view name="action-invoice-root-create-invoice" title="Create invoice" model="com.axelor.gst.db.Invoice">
+		<view type="form"/>
+	</action-view>
+	
+	<menuitem title="Draft invoice" name="invoice-root-draft-invoice" parent="invoice-root" action="action-invoice-root-draft-invoice"/>
+	<action-view name="action-invoice-root-draft-invoice" title="Draft invoice" model="com.axelor.gst.db.Invoice">
+		<view type="grid"/>
+		<view type="form"/>
+		<domain>self.status = '1'</domain>
+	</action-view>
+	
+	<menuitem title="Validated invoice" name="invoice-root-validated-invoice" parent="invoice-root" action="action-invoice-root-validated-invoice"/>
+	<action-view name="action-invoice-root-validated-invoice" title="Validated invoice" model="com.axelor.gst.db.Invoice">
+		<view type="grid"/>
+		<view type="form"/>
+		<domain>self.status = '2'</domain>
+	</action-view>
+	
+	<menuitem title="Paid invoice" name="invoice-root-paid-invoice" parent="invoice-root" action="action-invoice-root-paid-invoice"/>
+	<action-view name="action-invoice-root-paid-invoice" title="Paid invoice" model="com.axelor.gst.db.Invoice">
+		<view type="grid"/>
+		<view type="form"/>
+		<domain>self.status = '3'</domain>
+	</action-view>
+	
+	<menuitem title="Cancelled invoice" name="invoice-root-cancelled-invoice" parent="invoice-root" action="action-invoice-root-cancelled-invoice"/>
+	<action-view name="action-invoice-root-cancelled-invoice" title="Cancelled invoice" model="com.axelor.gst.db.Invoice">
+		<view type="grid"/>
+		<view type="form"/>
+		<domain>self.status = '4'</domain>
+	</action-view>
+	
+	<menuitem title="All invoice" name="invoice-root-all-invoice" parent="invoice-root" action="action-invoice-root-all-invoice"/>
+	<action-view name="action-invoice-root-all-invoice" title="All invoice" model="com.axelor.gst.db.Invoice">
+		<view type="kanban"/>
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+	
+	
+	<menuitem title="Company" name="company-root" />
+	
+	<menuitem title="Company" name="company-root-company" parent="company-root" action="action-company-root-company"/>
+	<action-view name="action-company-root-company" title="Company" model="com.axelor.gst.db.Company">
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+		
+	<menuitem title="Bank Account" name="company-root-bankAccount" parent="company-root" action="action-company-root-bankAccount"/>
+	<action-view name="action-company-root-bankAccount" title="Bank account" model="com.axelor.gst.db.BankAccount">
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+	
+	<menuitem title="Sequence" name="company-root-sequence" parent="company-root" action="action-company-root-sequence"/>
+	<action-view name="action-company-root-sequence" title="Sequence" model="com.axelor.gst.db.Sequence">
+		<view type="grid"/>
+		<view type="form"/>
+	</action-view>
+	
+</object-views>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

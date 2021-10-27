@@ -9,7 +9,7 @@
 			<string name="name" title="Bank" required="true" />
 			<string name="accountNumber" title="Account Number" required="true" />
 			<string name="IFSC" title="IFSC" required="true" />
-			<string name="type" title="Type" selection="gst-bankAccount-type" />
+			<string name="type" title="Type" selection="gst-bankAccount-type" default="2" />
 			<string name="address" title="Address" multiline="true" />
 		</entity>
 		

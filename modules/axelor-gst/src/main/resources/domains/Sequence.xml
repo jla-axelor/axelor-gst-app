@@ -12,6 +12,6 @@
 
 			<integer name="padding" title="Padding" min="1" max="10"/>
 
-<!-- 			<many-to-one ref="MetaModel" name="model" required="true"/> -->
+			<many-to-one ref="com.axelor.meta.db.MetaModel" name="model" required="true"/>
 		</entity>
 </domain-models>

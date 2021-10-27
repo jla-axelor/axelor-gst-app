@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 	
-	<cards name="party_card" model="com.axelor.gst.db.Party" title="Parties List">
+	<cards name="party_card" model="com.axelor.gst.db.Party" title="Parties List" width="100px">
 		<field name="refrence" />
 		<field name="name" />
 		<field name="type" />
@@ -14,12 +14,12 @@
 		<template>
 			<![CDATA[
 				<div class="span-4">
-					<strong>refrence</strong>
-					<strong>name</strong>
-					<strong>type</strong>
-					<strong>customer</strong>
-					<strong>supplier</strong>
-					<strong>gstin</strong>
+					<strong>{{refrence}}</strong>
+					<strong>{{name}}</strong>
+					<strong>{{type}}</strong>
+					<strong>{{customer}}</strong>
+					<strong>{{supplier}}</strong>
+					<strong>{{gstin}}</strong>
 				</div> 
 			]]>
 		</template>
@@ -42,10 +42,30 @@
 			<field name="customer" />
 			<field name="supplier" />
 			<field name="gstin" />
+<!-- 			<field name="contact" widget="editor" /> -->
+				<field name="contact" colSpan="12">
+					<editor>
+				  		<field name="name" />
+				  		<field name="type" />
+				  		<field name="primeryEmail" />
+				  		<field name="secondaryEmail" />
+				  		<field name="primeryPhone" />
+				  		<field name="secondaryPhone" />
+				</editor>
+			</field>
 			
-			<field name="contact" widget="editor" />
-			<field name="address" widget="editor" />				
+			<field name="address" >
+				<editor>
+					<field name="type" />
+					<field name="city" />
+					<field name="state" />
+					<field name="country" />
+					<field name="pinCode" />
+				</editor>
+			</field>
+							
 		</panel>
 	</form>
+	
 	
 </object-views>
