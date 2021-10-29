@@ -12,11 +12,16 @@
 		
 		<template>
 			<![CDATA[
-				<strong>refrence</strong>
-				<strong>invoiceDate</strong>
-				<strong>company</strong>
-				<strong>party</strong>
-				<strong>grossAmount</strong>
+			<table>
+				<tr>
+					<strong>{{refrence}}</strong><br/>
+				</tr>
+				
+				<strong>{{invoiceDate}}</strong><br/>
+				<strong>Company:{{company.name}}</strong><br/>
+				<strong>Party:{{party.name}}</strong><br/>
+				<strong>{{grossAmount}}</strong>
+			</table>
 			]]>
 		</template>
   	</kanban>
@@ -31,44 +36,74 @@
 	</grid>
 	
 	<form model="com.axelor.gst.db.Invoice" title="Invoice" name="invoice_form" onNew="action-on-new-date-time,action-one-new-default-company">
-	<panel name="mainPanel1">
+		<panel name="mainPanel1">
+		
+			<field name="refrence" />
+			<field name="status" widget="NavSelect" />
+			<field name="invoiceDate" />
+			<field name="useInvoiceAddressAsShippingAddress" />
+			<field name="company" />
+			<field name="party" onChange="action-primery-party-contact" />
+			<field name="partyContact" />
+			<field name="invoiceAddress" />
+			<field name="shippingAddress" />
+		</panel>
+		
+		<panel name="mainPanel2">
+			<field name="netAmmount" />
+			<field name="netIGST" />
+			<field name="netCSGT" />
+			<field name="netSGST" />
+			<field name="grossAmount" />
+		</panel>
+		
+		<panel name="invoiceLinePanle">
+			<panel-related field="invoiceItem" />
+		</panel>
+		
+		<panel name="sidePanel" sidebar="true">
+			<button onClick="action-click-draft,action-click-change-name" name="draftBtn" title="Draft" />
+	<!-- 		<button onClick="action-click-validate" name="validateBtn" title="Validate"/> -->
+		</panel>
 	
-		<field name="refrence" />
-		<field name="status" widget="NavSelect" />
-		<field name="invoiceDate" />
-		<field name="useInvoiceAddressAsShippingAddress" />
-		<field name="company" />
-		<field name="party" />
-		<field name="partyContact" />
-		<field name="invoiceAddress" />
-		<field name="shippingAddress" />
-	</panel>
-	
-	<panel name="mainPanel2">
-		<field name="netAmmount" />
-		<field name="netIGST" />
-		<field name="netCSGT" />
-		<field name="netSGST" />
-		<field name="grossAmount" />
-	</panel>
-	
-	<panel name="invoiceLinePanle">
-		<panel-related field="invoiceItem" />
-	</panel>
-	
-	<panel name="sidePanel" sidebar="true">
-		<button onClick="action-click-draft" name="draft" title="Draft"/>
-	</panel>
 	</form>
 	<action-record name="action-on-new-date-time" model="com.axelor.gst.db.Invoice">
 		<field name="invoiceDate" expr="eval: __date__"/>
 	</action-record>
 	
 	<action-record name="action-click-draft" model="com.axelor.gst.db.Invoice">
-		<field name="status" expr="eval: 1"/>
+		<field name="status" expr="eval: 1"  />
+		<field name="status" expr="eval: 2" if="status == '1'" />
+		<field name="status" expr="eval: 3" if="status == '2'" />
+		<field name="status" expr="eval: 4" if="status == '3'" />
+		<field name="status" expr="eval: 1" if="status == '4'" />
 	</action-record>
+	<action-attrs name="action-click-change-name" model="com.axelor.gst.db.Invoice">
+		<attribute name="title" for="draftBtn" expr="Validate" if="status == '1'"/>
+		<attribute name="title" for="draftBtn" expr="Paid" if="status == '2'"/>
+		<attribute name="title" for="draftBtn" expr="Cancelled" if="status == '3'"/>
+		<attribute name="title" for="draftBtn" expr="Draft" if="status == '4'"/>
+	</action-attrs>
 	
 	<action-record name="action-one-new-default-company" model="com.axelor.gst.db.Invoice">
- 		<field name="company" expr="__repo__(company).all.filter"/> 
+ 		<field name="company" expr="eval: __repo__(Company).all().fetch().get(0)" if="eval: __repo__(Company).all().fetch().get(0) != NULL" /> 
 	</action-record>
+	
+	<action-record name="action-primery-party-contact" model="com.axelor.gst.db.Invoice" >
+		<field name="partyContact" expr="eval: party?.contact" if="party?.contact?.type == 1" />
+	</action-record>	
+
 </object-views>
+
+
+
+
+
+
+
+
+
+
+
+
+
