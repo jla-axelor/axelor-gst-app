@@ -7,16 +7,19 @@
 		<field name="prifix" />
 		<field name="suffix" />
 		<field name="nextNumber" />
+		<field name="incrementOf" />
 		<field name="padding" />
 		<field name="model" />
 	</grid>
-	<form model="com.axelor.gst.db.Sequence" title="Sequence" name="sequence_form">
+	<form model="com.axelor.gst.db.Sequence" title="Sequence" name="sequence_form" >
 		<panel name="mainPanel">
 			<field name="prifix" />
 			<field name="suffix" />
 			<field name="nextNumber" />
+			<field name="incrementOf" />
 			<field name="padding" />
 			<field name="model" />			
 		</panel>
 	</form>
+
 </object-views>

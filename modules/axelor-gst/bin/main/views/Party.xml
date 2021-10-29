@@ -34,7 +34,7 @@
 		<field name="gstin" />
 	</grid>
 	
-	<form model="com.axelor.gst.db.Party" title="Party" name="party_form">
+	<form model="com.axelor.gst.db.Party" title="Party" name="party_form" onNew="action-add-sequence">
 		<panel name="mainPanel">
 			<field name="refrence" />
 			<field name="name" />
@@ -54,9 +54,11 @@
 				</editor>
 			</field>
 			
-			<field name="address" >
-				<editor>
+			<field name="address" colSpan="12">
+				<editor x-viewer="true">
 					<field name="type" />
+					<field name="line1" />
+					<field name="line2" />
 					<field name="city" />
 					<field name="state" />
 					<field name="country" />
@@ -66,6 +68,7 @@
 							
 		</panel>
 	</form>
-	
-	
+			<action-method name="action-add-sequence" model="com.axelor.gst.db.Sequence">
+		<call class="com.axelor.gst.web.SequenceController" method="setSequence"/>
+	</action-method>
 </object-views>

@@ -35,38 +35,40 @@
 		<field name="grossAmount" />
 	</grid>
 	
-	<form model="com.axelor.gst.db.Invoice" title="Invoice" name="invoice_form" onNew="action-on-new-date-time,action-one-new-default-company">
-		<panel name="mainPanel1">
-		
-			<field name="refrence" />
-			<field name="status" widget="NavSelect" />
-			<field name="invoiceDate" />
-			<field name="useInvoiceAddressAsShippingAddress" />
-			<field name="company" />
-			<field name="party" onChange="action-primery-party-contact" />
-			<field name="partyContact" />
-			<field name="invoiceAddress" />
-			<field name="shippingAddress" />
-		</panel>
-		
-		<panel name="mainPanel2">
-			<field name="netAmmount" />
-			<field name="netIGST" />
-			<field name="netCSGT" />
-			<field name="netSGST" />
-			<field name="grossAmount" />
-		</panel>
-		
-		<panel name="invoiceLinePanle">
-			<panel-related field="invoiceItem" />
-		</panel>
-		
-		<panel name="sidePanel" sidebar="true">
-			<button onClick="action-click-draft,action-click-change-name" name="draftBtn" title="Draft" />
-	<!-- 		<button onClick="action-click-validate" name="validateBtn" title="Validate"/> -->
-		</panel>
+	<form model="com.axelor.gst.db.Invoice" title="Invoice" name="invoice_form" onNew="action-on-new-date-time,action-one-new-default-company" 
+					onSave="action-set-invoice-net">
+	<panel name="mainPanel1">
+	
+		<field name="refrence" />
+		<field name="status" widget="NavSelect" />
+		<field name="invoiceDate" />
+		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoiceAdd-as-shippingAdd"/>
+		<field name="company" />
+		<field name="party" onChange="action-set-party-contact,action-invoiceAdd-as-shippingAdd" />
+		<field name="partyContact" />
+		<field name="invoiceAddress" target-name="line1" />
+		<field name="shippingAddress" target-name="line1" />
+	</panel>
+	
+	<panel name="mainPanel2">
+		<field name="netAmmount" />
+		<field name="netIGST" />
+		<field name="netCSGT" />
+		<field name="netSGST" />
+		<field name="grossAmount" />
+	</panel>
+	
+	<panel name="invoiceLinePanle">
+		<panel-related field="invoiceItem" />
+	</panel>
+
+	<panel name="sidePanel" sidebar="true">
+		<button onClick="action-click-draft,action-click-change-name" name="draftBtn" title="Draft" />
+	<!--<button onClick="action-click-validate" name="validateBtn" title="Validate"/> -->
+	</panel>
 	
 	</form>
+	
 	<action-record name="action-on-new-date-time" model="com.axelor.gst.db.Invoice">
 		<field name="invoiceDate" expr="eval: __date__"/>
 	</action-record>
@@ -78,6 +80,7 @@
 		<field name="status" expr="eval: 4" if="status == '3'" />
 		<field name="status" expr="eval: 1" if="status == '4'" />
 	</action-record>
+	
 	<action-attrs name="action-click-change-name" model="com.axelor.gst.db.Invoice">
 		<attribute name="title" for="draftBtn" expr="Validate" if="status == '1'"/>
 		<attribute name="title" for="draftBtn" expr="Paid" if="status == '2'"/>
@@ -86,13 +89,28 @@
 	</action-attrs>
 	
 	<action-record name="action-one-new-default-company" model="com.axelor.gst.db.Invoice">
- 		<field name="company" expr="eval: __repo__(Company).all().fetch().get(0)" if="eval: __repo__(Company).all().fetch().get(0) != NULL" /> 
+ 		<field name="company" expr="eval: __repo__(Company).all().fetch().get(0)" /> 
 	</action-record>
 	
-	<action-record name="action-primery-party-contact" model="com.axelor.gst.db.Invoice" >
-		<field name="partyContact" expr="eval: party?.contact" if="party?.contact?.type == 1" />
-	</action-record>	
-
+	<action-method name="action-set-party-contact" model="com.axelor.gst.db.Invoice">
+		<call class="com.axelor.gst.web.InvoiceController" method="setPartyContact"/>
+	</action-method>
+	
+	<action-method name="action-invoiceAdd-as-shippingAdd" model="com.axelor.gst.db.Invoice">
+		<call class="com.axelor.gst.web.InvoiceController" method="setShippingAdd"/>
+	</action-method>
+	
+	<action-method name="action-set-invoice-net" model="com.axelor.gst.db.Invoice">
+		<call class="com.axelor.gst.web.InvoiceController" method="setInvoiceNet"/>
+	</action-method>
+<!-- 	<action-record name="action-fill-default-company" model="com.axelor.gst.db.Company" search="self.company == NUll"> -->
+<!-- 		<field name="name" expr="Axelor"/> -->
+<!-- 		<field name="contact" expr="action: action-fill-default-contact-company"/> -->
+<!-- 	</action-record> -->
+<!-- 	<action-record name="action-fill-default-contact-company" model="com.axelor.gst.db.Contact"> -->
+<!-- 		<field name="name" expr="Jaydeep"/> -->
+<!-- 		<field name="type" expr="eval: '1'"/> -->
+<!-- 	</action-record> -->
 </object-views>
 
 

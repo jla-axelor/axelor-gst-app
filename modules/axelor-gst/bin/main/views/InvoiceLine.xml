@@ -19,11 +19,11 @@
 	
 	<form model="com.axelor.gst.db.InvoiceLine" title="Invoice Line" name="invoiceLine_form">
 		<panel>
-			<field name="product" />
-			<field name="HSBN" />
+			<field name="product" onChange="action-compy-product-name-code" />
+			<field name="HSBN" title="HSBN" />
 			<field name="item" />
-			<field name="quentity" />
-			<field name="price" />
+			<field name="quentity" onChange="action-caculate-net-amount ,action-set-values" />
+			<field name="price"  onChange="action-caculate-net-amount ,action-set-values"/>
 			<field name="netAmount" />
 			<field name="gstRate" />
 			<field name="IGST" />
@@ -32,4 +32,15 @@
 			<field name="grossAmount" />
 		</panel>
 	</form>	
+	<action-record name="action-compy-product-name-code" model="com.axelor.gst.db.InvoiceLine">
+		<field name="item" expr="eval: product.name+ ':' +product.code"/>
+		<field name="gstRate" expr="eval: product.gstRate"/>
+	</action-record>
+	<action-record name="action-caculate-net-amount" model="com.axelor.gst.db.InvoiceLine">
+		<field name="netAmount" expr="eval: (quentity * price)"/>
+	</action-record>
+	
+	<action-method name="action-set-values" model="com.axelor.gst.db.Invoice">
+		<call class="com.axelor.gst.web.InvoiceController" method="setAmount"/>
+	</action-method>
 </object-views>

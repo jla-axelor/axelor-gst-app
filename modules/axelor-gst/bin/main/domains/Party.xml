@@ -6,7 +6,7 @@
 		<module package="com.axelor.gst.db" name="gst"/>
 		
 		<entity name="Party">
-			<string name="refrence" sequence="com.axelor.gst.db.Sequence" readonly="true" default="2" />
+			<string name="refrence" readonly="true" />
 			<string name="name" required="true" title="Name" />
 			<string name="type" title="Type" selection="gst-party-type" />
 			<string name="gstin" title="GSTIN" min="15" max="15" />

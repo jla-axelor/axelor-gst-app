@@ -28,7 +28,7 @@
 				</editor>
 			</field>
 			<panel-related field="bankDetails" name="bankDetails" colSpan="12"/>
-			<field name="address" />
+			<field name="address" target-name="line1" />
 		</panel>
 	</form>	
 
