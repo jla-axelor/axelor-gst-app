@@ -63,8 +63,9 @@
 	</panel>
 
 	<panel name="sidePanel" sidebar="true">
-		<button onClick="action-click-draft,action-click-change-name" name="draftBtn" title="Draft" />
-	<!--<button onClick="action-click-validate" name="validateBtn" title="Validate"/> -->
+		<button onClick="action-click-validate,action-set-invoice-refrence" name="statusBtn" title="Validate" />
+		<button onClick="action-click-paid" name="validateBtn" title="Paid"/>
+		<button onClick="action-click-Cancelled" name="validateBtn" title="Cancelled"/>
 	</panel>
 	
 	</form>
@@ -73,20 +74,16 @@
 		<field name="invoiceDate" expr="eval: __date__"/>
 	</action-record>
 	
-	<action-record name="action-click-draft" model="com.axelor.gst.db.Invoice">
-		<field name="status" expr="eval: 1"  />
-		<field name="status" expr="eval: 2" if="status == '1'" />
-		<field name="status" expr="eval: 3" if="status == '2'" />
-		<field name="status" expr="eval: 4" if="status == '3'" />
-		<field name="status" expr="eval: 1" if="status == '4'" />
+	<action-record name="action-click-validate" model="com.axelor.gst.db.Invoice">
+		<field name="status" expr="eval: 2" />
+	</action-record>
+	<action-record name="action-click-paid" model="com.axelor.gst.db.Invoice">
+		<field name="status" expr="eval: 3"  />
+	</action-record>
+		<action-record name="action-click-Cancelled" model="com.axelor.gst.db.Invoice">
+		<field name="status" expr="eval: 4"  />
 	</action-record>
 	
-	<action-attrs name="action-click-change-name" model="com.axelor.gst.db.Invoice">
-		<attribute name="title" for="draftBtn" expr="Validate" if="status == '1'"/>
-		<attribute name="title" for="draftBtn" expr="Paid" if="status == '2'"/>
-		<attribute name="title" for="draftBtn" expr="Cancelled" if="status == '3'"/>
-		<attribute name="title" for="draftBtn" expr="Draft" if="status == '4'"/>
-	</action-attrs>
 	
 	<action-record name="action-one-new-default-company" model="com.axelor.gst.db.Invoice">
  		<field name="company" expr="eval: __repo__(Company).all().fetch().get(0)" /> 
@@ -100,17 +97,15 @@
 		<call class="com.axelor.gst.web.InvoiceController" method="setShippingAdd"/>
 	</action-method>
 	
+	
 	<action-method name="action-set-invoice-net" model="com.axelor.gst.db.Invoice">
 		<call class="com.axelor.gst.web.InvoiceController" method="setInvoiceNet"/>
 	</action-method>
-<!-- 	<action-record name="action-fill-default-company" model="com.axelor.gst.db.Company" search="self.company == NUll"> -->
-<!-- 		<field name="name" expr="Axelor"/> -->
-<!-- 		<field name="contact" expr="action: action-fill-default-contact-company"/> -->
-<!-- 	</action-record> -->
-<!-- 	<action-record name="action-fill-default-contact-company" model="com.axelor.gst.db.Contact"> -->
-<!-- 		<field name="name" expr="Jaydeep"/> -->
-<!-- 		<field name="type" expr="eval: '1'"/> -->
-<!-- 	</action-record> -->
+	
+	<action-method name="action-set-invoice-refrence" model="com.axelor.gst.db.Invoice">
+		<call class="com.axelor.gst.web.InvoiceController" method="setSequence" />
+	</action-method>
+	
 </object-views>
 
 

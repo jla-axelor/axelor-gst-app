@@ -5,7 +5,7 @@
 		
 		<module package="com.axelor.gst.db" name="gst"/>
 		<entity name="Sequence">
-			<string name="prifix" title="Prifix" required="true" />
+			<string name="prefix" required="true" />
 			<string name="suffix" title="Suffix" />
 			<string name="nextNumber" title="Next Number" />
 			<integer name="incrementOf" />

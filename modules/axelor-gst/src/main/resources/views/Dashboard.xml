@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+
+	<chart name="validated.invoice.per.customer" title="Validated invoice per customer">
+		<search-fields>
+			<field name="fromDate" type="date" title="From date"/>
+			<field name="toDate" type="date" title="To date"/>
+		</search-fields>
+		<dataset type="jpql">
+			<![CDATA[
+				SELECT 
+					COUNT(self.refrence) AS invoice,
+					MONTH(self.invoiceDate) AS month,
+					_party.name AS party	
+				 FROM 
+				 	Invoice self
+				 LEFT JOIN
+				 	self.party _party
+				 WHERE 
+				 	self.status = '2' AND _party.customer = true AND self.invoiceDate BETWEEN :fromDate AND :toDate
+				 GROUP BY
+				 	self.invoiceDate,
+				 	_party.name		
+			]]>
+		</dataset>
+		<category key="party" type="number" title="Month"/>
+		<series key="invoice" type="bar"  title="Invoice"/>
+	</chart>
+	
+	<dashboard name="dashboard" title="Dashboard">
+		<dashlet action="chart:validated.invoice.per.customer"/>
+	</dashboard>
+</object-views>

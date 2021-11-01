@@ -124,6 +124,11 @@
 		<view type="form"/>
 	</action-view>
 	
+	<menuitem title="Dashboard" name="dashboard-root" />
+	<menuitem title="Dashboaed" name="dashboard-root-dashboard" parent="dashboard-root" action="action-dashboard"/>
+	<action-view name="action-dashboard" title="Dashboard">
+		<view type="dashboard" name="dashboard"/>
+	</action-view>
 </object-views>
 
 

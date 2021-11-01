@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import com.axelor.gst.db.Address;
 import com.axelor.gst.db.Invoice;
 import com.axelor.gst.db.InvoiceLine;
+import com.axelor.gst.service.SequenceService;
+import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 
@@ -103,6 +105,15 @@ public class InvoiceController {
 		res.setValue("netCSGT", netCGST);
 		res.setValue("netSGST", netSGST);
 		res.setValue("grossAmount", grossAmount);
+	}
+	
+	public void setSequence(ActionRequest req , ActionResponse res) {
+		if (req.getContext().asType(Invoice.class).getStatus().equals("2")) {
+			
+			String model = "com.axelor.gst.db.Invoice";
+			String SEQUENCE = Beans.get(SequenceService.class).setSequence(model);
+			res.setValue("refrence", SEQUENCE);
+		}
 	}
 	
 }

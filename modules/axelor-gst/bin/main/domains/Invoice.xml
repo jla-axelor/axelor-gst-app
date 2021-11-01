@@ -5,7 +5,7 @@
 	
 		<module package="com.axelor.gst.db" name="gst"/>
 		<entity name="Invoice">
-			<string name="status" readonly="true" selection="gst-invoice-status" />
+			<string name="status" readonly="true" selection="gst-invoice-status" default="1" />
 			<string name="refrence"  readonly="true"/>
 
 			<datetime name="invoiceDate" />
