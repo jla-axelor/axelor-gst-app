@@ -29,7 +29,99 @@
 		<series key="invoice" type="bar"  title="Invoice"/>
 	</chart>
 	
+	<chart name="customer.per.state" title="Customer per state">
+		<dataset type="jpql">
+			<![CDATA[
+				SELECT 
+					COUNT(self.name) AS customer, 
+					_address.state.name AS state
+				FROM
+					Party self
+				LEFT JOIN
+					self.address _address
+				WHERE
+					self.customer = true 
+				GROUP BY
+					self.name , 
+					_address.state.name
+			]]>
+		</dataset>
+		<category key="state" title="State" type="text"/>
+		<series key="customer" type="pie" title="Customer"/>
+		<config name="percent" value="true"/>
+	</chart>
+
+	<chart name="invoice.per.status.line" title="Invoice per status (Invoice count line)" >
+		<dataset type="jpql">
+			<![CDATA[
+				SELECT 
+					COUNT(self.refrence) AS invoice,
+					self.status AS status
+				FROM
+					Invoice self
+				GROUP BY
+					self.status
+			]]>
+		</dataset>
+		<category key="status" type="text" title="status"/>
+		<series key="invoice" type="line" groupBy="status"/>
+	</chart>
+	
+	<chart name="invoice.per.status.bar" title="Invoice per status(Invoice amount bar)">
+		<dataset type="jpql">
+			<![CDATA[
+				SELECT 
+					self.grossAmount AS amount,
+					self.status AS status
+				FROM
+					Invoice self
+				GROUP BY 
+					self.status,
+					self.grossAmount
+			]]>
+		</dataset>
+		<category key="status" title="Status" type="text"/>
+		<series key="amount" title="Amount" type="bar"/>
+	</chart>
+			
+	<chart name="paid.invoices.per.product" title="Paid inoive per category per prodyuct">
+		<dataset type="jpql">
+			<![CDATA[
+				SELECT 
+					COUNT(self.refrence) AS invoice ,
+					_invoiceItem.product.category.name AS category
+				FROM 
+					Invoice self
+				LEFT JOIN
+					self.invoiceItem AS _invoiceItem
+				WHERE
+					self.status = '3'
+				GROUP BY
+					_invoiceItem.product.category.name
+			]]>
+		</dataset>
+		<category key="category" type="text"/>
+		<series key="invoice" type="bar"/>
+	</chart>		
 	<dashboard name="dashboard" title="Dashboard">
 		<dashlet action="chart:validated.invoice.per.customer"/>
+		<dashlet action="chart:customer.per.state"/>
+		<dashlet action="chart:paid.invoices.per.product" colSpan="12"/>
+		<dashlet action="chart:invoice.per.status.line"/>
+		<dashlet action="chart:invoice.per.status.bar"/>
+		<dashlet action="invoice.grid" colSpan="12"/>
 	</dashboard>
+	<action-view name="invoice.grid" title="Invoice" model="com.axelor.gst.db.Invoice">
+
+		<view type="grid" />
+		<view type="form"/>
+
+<!-- 				self.status = '2' OR self.status = '3'  -->
+		<domain>
+				self.refrence IS NOT NULL
+			AND
+				month(self.invoiceDate)=month(now())-1
+		</domain>
+	</action-view>
+	
 </object-views>

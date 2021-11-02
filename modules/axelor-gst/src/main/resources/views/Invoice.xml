@@ -29,7 +29,7 @@
 	<grid model="com.axelor.gst.db.Invoice" title="Invoices" name="invoice_grid">
 		<field name="refrence" />
 		<field name="status" />
-		<field name="invoiceDate" />
+		<field name="invoiceDate"/>
 		<field name="company" />
 		<field name="party" />
 		<field name="grossAmount" />
