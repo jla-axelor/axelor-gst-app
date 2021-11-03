@@ -37,6 +37,9 @@
 	
 	<form model="com.axelor.gst.db.Invoice" title="Invoice" name="invoice_form" onNew="action-on-new-date-time,action-one-new-default-company" 
 					onSave="action-set-invoice-net">
+	<toolbar>
+		<button onClick="print-invoice" name="print" icon="fa-print" title="Print"/>
+	</toolbar>
 	<panel name="mainPanel1">
 	
 		<field name="refrence" />
@@ -86,7 +89,7 @@
 	
 	
 	<action-record name="action-one-new-default-company" model="com.axelor.gst.db.Invoice">
- 		<field name="company" expr="eval: __repo__(Company).all().fetch().get(0)" /> 
+ 		<field name="company" expr="eval: __repo__(Company).all().fetchOne()" /> 
 	</action-record>
 	
 	<action-method name="action-set-party-contact" model="com.axelor.gst.db.Invoice">
@@ -105,6 +108,14 @@
 	<action-method name="action-set-invoice-refrence" model="com.axelor.gst.db.Invoice">
 		<call class="com.axelor.gst.web.InvoiceController" method="setSequence" />
 	</action-method>
+	
+	<action-report
+		name="print-invoice" 
+		output="IO-${name}-${date}-${time}" 
+		design="Invoice.rptdesign">
+		<param name="invoiceId" expr="eval: refrence"/>
+	
+	</action-report>
 	
 </object-views>
 
