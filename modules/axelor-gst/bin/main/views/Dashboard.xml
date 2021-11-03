@@ -85,23 +85,30 @@
 	</chart>
 			
 	<chart name="paid.invoices.per.product" title="Paid inoive per category per prodyuct">
+		<search-fields>
+			<field name="fromDate" type="date"/>
+			<field name="toDate" type="date"/>
+		</search-fields>
 		<dataset type="jpql">
 			<![CDATA[
 				SELECT 
 					COUNT(self.refrence) AS invoice ,
-					_invoiceItem.product.category.name AS category
+					_invoiceItem.product.category.name AS category ,
+					_invoiceItem.product.name AS product
 				FROM 
 					Invoice self
 				LEFT JOIN
 					self.invoiceItem AS _invoiceItem
 				WHERE
-					self.status = '3'
+					self.status = '3' AND
+					self.invoiceDate BETWEEN :fromDate AND :toDate
 				GROUP BY
+					_invoiceItem.product.name,
 					_invoiceItem.product.category.name
 			]]>
 		</dataset>
 		<category key="category" type="text"/>
-		<series key="invoice" type="bar"/>
+		<series key="invoice" groupBy="product" type="bar"/>
 	</chart>		
 	<dashboard name="dashboard" title="Dashboard">
 		<dashlet action="chart:validated.invoice.per.customer"/>
@@ -116,8 +123,9 @@
 		<view type="grid" />
 		<view type="form"/>
 
-<!-- 				self.status = '2' OR self.status = '3'  -->
 		<domain>
+				(self.status = '2' OR self.status = '3') 
+			AND
 				self.refrence IS NOT NULL
 			AND
 				month(self.invoiceDate)=month(now())-1

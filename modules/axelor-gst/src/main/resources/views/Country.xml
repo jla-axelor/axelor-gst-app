@@ -8,6 +8,8 @@
 	</grid>
 	
 	<form model="com.axelor.gst.db.Country" title="Country" name="country_form">
+	<panel name="mainPanel">
 		<field name="name" />
+	</panel>
 	</form>
 </object-views>

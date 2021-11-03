@@ -9,7 +9,9 @@
 	</grid>
 	
 	<form model="com.axelor.gst.db.State" title="State" name="state_form">
-		<field name="name" />
-		<field name="country" />
+		<panel name="mainPanel">
+				<field name="name" />
+				<field name="country" />
+		</panel>
 	</form>
 </object-views>
