@@ -113,8 +113,7 @@
 		name="print-invoice" 
 		output="IO-${name}-${date}-${time}" 
 		design="Invoice.rptdesign">
-		<param name="invoiceId" expr="eval: refrence"/>
-	
+		<param name="invoiceId" expr="eval: id"/>
 	</action-report>
 	
 </object-views>
