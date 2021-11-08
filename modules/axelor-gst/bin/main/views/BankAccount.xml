@@ -11,8 +11,8 @@
 			<field name="address" />
 		</grid>
 		
-		<form model="com.axelor.gst.db.BankAccount" title="Bank Account" name="bankAccount_form">
-			<panel name="mainPanel">
+		<form model="com.axelor.gst.db.BankAccount" title="Bank Account" name="bankAccount_form" css="panel-green">
+			<panel name="mainPanel" title="Bank details">
 				<field name="name" />
 				<field name="accountNumber" />
 				<field name="IFSC" />

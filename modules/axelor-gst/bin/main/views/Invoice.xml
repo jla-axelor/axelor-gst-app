@@ -35,17 +35,17 @@
 		<field name="grossAmount" />
 	</grid>
 	
-	<form model="com.axelor.gst.db.Invoice" title="Invoice" name="invoice_form" onNew="action-on-new-date-time,action-one-new-default-company" 
-					onSave="action-set-invoice-net">
+	<form model="com.axelor.gst.db.Invoice" title="Invoice" name="invoice_form" onNew="action-on-new-date-time,action-one-new-default-company,action-set-product" 
+					onSave="action-set-invoice-net" css="panel-blue">
 	<toolbar>
-		<button onClick="print-invoice" name="print" icon="fa-print" title="Print"/>
+		<button onClick="print-invoice" name="print" icon="fa-print" />
 	</toolbar>
-	<panel name="mainPanel1">
+	<panel name="mainPanel1" title="Invoice">
 	
 		<field name="refrence" />
 		<field name="status" widget="NavSelect" />
 		<field name="invoiceDate" />
-		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoiceAdd-as-shippingAdd"/>
+		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoiceAdd-as-shippingAdd" widget="boolean-switch"/>
 		<field name="company" />
 		<field name="party" onChange="action-set-party-contact,action-invoiceAdd-as-shippingAdd" />
 		<field name="partyContact" />
@@ -53,19 +53,19 @@
 		<field name="shippingAddress" target-name="line1" />
 	</panel>
 	
-	<panel name="mainPanel2">
+	<panel name="mainPanel2" title="Amount">
 		<field name="netAmmount" />
-		<field name="netIGST" />
-		<field name="netCSGT" />
-		<field name="netSGST" />
-		<field name="grossAmount" />
+		<field name="netIGST" title="Net IGST" />
+		<field name="netCSGT"  title="Net CSGT"/>
+		<field name="netSGST" title="Net SGST"/>
+		<field name="grossAmount" title="Gross Amount"/>
 	</panel>
 	
-	<panel name="invoiceLinePanle">
-		<panel-related field="invoiceItem" />
+	<panel name="invoiceLinePanle" title="Invoice items">
+		<panel-related field="invoiceItem" colSpan="12" />
 	</panel>
 
-	<panel name="sidePanel" sidebar="true">
+	<panel name="sidePanel" sidebar="true" title="Status">
 		<button onClick="action-click-validate,action-set-invoice-refrence" name="statusBtn" title="Validate" />
 		<button onClick="action-click-paid" name="validateBtn" title="Paid"/>
 		<button onClick="action-click-Cancelled" name="validateBtn" title="Cancelled"/>
@@ -116,6 +116,9 @@
 		<param name="invoiceId" expr="eval: id"/>
 	</action-report>
 	
+	<action-method name="action-set-product" model="com.axelor.gst.db.Invoice">
+		<call class="com.axelor.gst.web.InvoiceController" method="setSelectedProduct"/>
+	</action-method>
 </object-views>
 
 

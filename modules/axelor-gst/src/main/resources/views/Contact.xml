@@ -10,8 +10,8 @@
   		<field name="primeryPhone" />
   	</grid>
   	
-  	<form model="com.axelor.gst.db.Contact" title="Contact" name="contact_form">
-  	<panel name="manPanel">
+  	<form model="com.axelor.gst.db.Contact" title="Contact" name="contact_form" css="panel-red">
+  	<panel name="manPanel" title="Contact">
 	  		<field name="name" />
 	  		<field name="type" />
 	  		<field name="primeryEmail" />

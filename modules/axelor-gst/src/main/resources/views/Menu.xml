@@ -3,7 +3,14 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 	
-	<menuitem title="Party" name="party-root" icon="fa-book" icon-background="red" />
+	<menuitem title="Dashboards" name="dashboard-root" order="1" icon="fa-dashboard" icon-background="blue"/>
+	
+	<menuitem title="Welcome !" name="dashboard-root-dashboard" parent="dashboard-root" action="action-dashboard"/>
+	<action-view name="action-dashboard" title="Dashboard">
+		<view type="dashboard" name="dashboard"/>
+	</action-view>
+	
+	<menuitem title="Party" name="party-root" icon="fa-book" icon-background="red" order="2" />
 	
 	<menuitem title="Party" name="party-root-party" parent="party-root" action="action-party-root-party"/>
 	<action-view name="action-party-root-party" title="Party" model="com.axelor.gst.db.Party">
@@ -17,7 +24,6 @@
 		<view type="grid"/>
 		<view type="form"/>
 	</action-view>
-	
 	
 	<menuitem title="Configurations" name="party-root-configurations" parent="party-root" />
 	
@@ -46,12 +52,14 @@
 	</action-view>
 	
 	
-	<menuitem title="Product" name="product-root" icon="fa-product-hunt" icon-background="blue" />
+	<menuitem title="Product" name="product-root" icon="fa-product-hunt" icon-background="blue" order="3"/>
 	
 	<menuitem title="Product" name="product-root-product" parent="product-root" action="action-product-root-product"/>
 	<action-view name="action-product-root-product" title="Product" model="com.axelor.gst.db.Product">
+		<view type="cards"/>
 		<view type="grid"/>
 		<view type="form"/>
+		<context name="json-enhance" expr="true"/>
 	</action-view>
 	
 	<menuitem title="Product Category" name="product-root-product-category" parent="product-root" action="action-product-root-product-category"/>
@@ -61,7 +69,7 @@
 	</action-view>
 
 	
-	<menuitem title="Invoice" name="invoice-root"/>
+	<menuitem title="Invoice" name="invoice-root" order="4" icon-background="bluegrey" icon="fa-file"/>
 	
 	<menuitem title="Create invoice" name="invoice-root-invoice" parent="invoice-root" action="action-invoice-root-create-invoice"/>
 	<action-view name="action-invoice-root-create-invoice" title="Create invoice" model="com.axelor.gst.db.Invoice">
@@ -104,7 +112,7 @@
 	</action-view>
 	
 	
-	<menuitem title="Company" name="company-root" />
+	<menuitem title="Company" name="company-root" order="5" icon="fa-building"/>
 	
 	<menuitem title="Company" name="company-root-company" parent="company-root" action="action-company-root-company"/>
 	<action-view name="action-company-root-company" title="Company" model="com.axelor.gst.db.Company">
@@ -124,11 +132,6 @@
 		<view type="form"/>
 	</action-view>
 	
-	<menuitem title="Dashboard" name="dashboard-root"/>
-	<menuitem title="Welcome !" name="dashboard-root-dashboard" parent="dashboard-root" action="action-dashboard" />
-	<action-view name="action-dashboard" title="Dashboard">
-		<view type="dashboard" name="dashboard"/>
-	</action-view>
 </object-views>
 
 

@@ -9,7 +9,12 @@ public class PartyController {
 	
 	public void setPartSequence(ActionRequest req , ActionResponse res) {
 		String model = "com.axelor.gst.db.Party";
-		String SEQUENCE = Beans.get(SequenceService.class).setSequence(model);
-		res.setValue("refrence", SEQUENCE);
+		String sequence = Beans.get(SequenceService.class).setSequence(model);
+		if(sequence.equals(null)) {
+			res.setError("Please set Sequence for party");
+		}
+		else {
+			res.setValue("refrence", sequence);
+		}
 	}
 }

@@ -3,25 +3,44 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
   
-  	<cards name="product_card" model="com.axelor.gst.db.Product" title="Products">
-  	
+  	<cards name="product_card" model="com.axelor.gst.db.Product" title="Products" >
   		<field name="name" />
 		<field name="image" />
 		<field name="code" />
 		<field name="HSBN" />
 		<field name="category" />
+		<field name="hasImage" />
 		<template>
 			<![CDATA[
-				<img ng-src="{{$image('image')}}">
+			<div class = "span4 card-image">
+				<img ng-src="{{$image(null, 'image')}}" ng-if="hasImage">
 				<strong>{{name}}</strong>
-				<strong>{{code}}</strong>
-				<strong>{{HSBN}}</strong>
-				<strong>{{category}}</strong>
+			</div>
+			<div class = "span8">
+				<table>
+						<tr>
+							<td>Code</td>
+							<td><strong>:&nbsp;{{code}}</strong></td>
+						</tr>
+						<tr>
+							<td>HSBN</td>
+							<td><strong>:&nbsp;{{HSBN}}</strong></td>
+						</tr>
+						<tr>
+							<td>Category</td>
+							<td><strong>:&nbsp;{{category.name}}</strong></td>
+						</tr>
+				</table>
+			</div>
 			]]>
 		</template>
   	</cards>
 	
 	<grid model="com.axelor.gst.db.Product" title="Products" name="product_grid">
+		<toolbar>
+			<button onClick="action-product-genrate-product" name="printProduct" icon="fa-print"/>
+			<button onClick="action-product-create-invoice" name="creteinvoice" title="Create invoice"/>
+		</toolbar>
 		<field name="name" />
 		<field name="image" />
 		<field name="code" />
@@ -32,13 +51,15 @@
 		<field name="gstRate" />
 	</grid>
 	
-	<form model="com.axelor.gst.db.Product" title="Product" name="product_from">
-		<panel name="mainPanel">
+	<form model="com.axelor.gst.db.Product" title="Product" name="product_from" css="panel-blue">
+		<panel name="mainPanel" title="Product">
+			<field name="image" widget="Image" colSpan="12"/>
+			<spacer colSpan="12"/>
 			<field name="name" />
-			<field name="image" widget="Image"/>
 			<field name="code" />
-			<field name="HSBN" />
+			<field name="HSBN" title="HSBN"/>
 			<field name="category" onChange="action-onchange-category-gstrate" />
+			<spacer colSpan="12"/>
 			<field name="salePrice" />
 			<field name="costPrice" />
 			<field name="gstRate" />
@@ -48,5 +69,12 @@
 	<action-record name="action-onchange-category-gstrate" model="com.axelor.gst.db.Product" >
 		<field name="gstRate" expr="eval: category.gstRate"/>
 	</action-record>
-	
+	<action-report 
+		output="PR-${date}" 
+		name="action-product-genrate-product" 
+		design="product.rptdesign"></action-report>
+	<action-view name="action-product-create-invoice" title="Invoice" model="com.axelor.gst.db.Invoice">
+		<view type="form" name="invoice_form" />
+		<context name="_id" expr="eval: __ids__"/>
+	</action-view>
 </object-views>

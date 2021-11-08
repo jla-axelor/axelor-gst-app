@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 import com.axelor.gst.db.Address;
 import com.axelor.gst.db.Invoice;
 import com.axelor.gst.db.InvoiceLine;
+import com.axelor.gst.db.Product;
+import com.axelor.gst.db.repo.InvoiceLineRepository;
+import com.axelor.gst.db.repo.ProductRepository;
 import com.axelor.gst.service.SequenceService;
 import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
@@ -111,8 +114,27 @@ public class InvoiceController {
 		if (req.getContext().asType(Invoice.class).getStatus().equals("2")) {
 			
 			String model = "com.axelor.gst.db.Invoice";
-			String SEQUENCE = Beans.get(SequenceService.class).setSequence(model);
-			res.setValue("refrence", SEQUENCE);
+			String sequence = Beans.get(SequenceService.class).setSequence(model);
+			if(sequence.equals(null)) {
+				res.setError("Please set Sequence for Invoice");
+			}
+			else {
+				res.setValue("refrence", sequence);
+			}
+		}
+	}
+	
+	public void setSelectedProduct(ActionRequest req , ActionResponse res) {
+		List<Integer> productids =(List<Integer>)req.getContext().get("_id");
+		if(!productids.equals(null)) {
+			for(Integer i : productids) {
+			Long l = new Long(i);	
+			Product product = Beans.get(ProductRepository.class).find(l);
+//			Beans.get(InvoiceLineRepository.class).all().fetch();
+//			res.set
+//			res.setValue(, productids);
+				System.err.println(product.getName());
+			}
 		}
 	}
 	

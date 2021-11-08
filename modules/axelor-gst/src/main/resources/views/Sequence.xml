@@ -11,8 +11,8 @@
 		<field name="padding" />
 		<field name="model" />
 	</grid>
-	<form model="com.axelor.gst.db.Sequence" title="Sequence" name="sequence_form" >
-		<panel name="mainPanel">
+	<form model="com.axelor.gst.db.Sequence" title="Sequence" name="sequence_form" css="panel-pink">
+		<panel name="mainPanel" title="Sequence">
 			<field name="prefix" />
 			<field name="suffix" />
 			<field name="nextNumber" />

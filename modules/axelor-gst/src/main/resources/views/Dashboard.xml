@@ -110,7 +110,7 @@
 		<category key="category" type="text"/>
 		<series key="invoice" groupBy="product" type="bar"/>
 	</chart>		
-	<dashboard name="dashboard" title="Dashboard">
+	<dashboard name="dashboard" title="Dashboard" css="panel-blue">
 		<dashlet action="chart:validated.invoice.per.customer"/>
 		<dashlet action="chart:customer.per.state"/>
 		<dashlet action="chart:paid.invoices.per.product" colSpan="12"/>

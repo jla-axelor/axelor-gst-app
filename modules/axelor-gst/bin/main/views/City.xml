@@ -9,8 +9,8 @@
 		<field name="country" />
 	</grid>
 	
-	<form model="com.axelor.gst.db.City" title="City" name="city_form">
-		<panel name="mainPanel">
+	<form model="com.axelor.gst.db.City" title="City" name="city_form" css="panel-green">
+		<panel name="mainPanel" title="City">
 		<field name="name" />
 		<field name="state" />
 		<field name="country" />

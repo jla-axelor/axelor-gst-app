@@ -3,23 +3,27 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 	
-	<cards name="party_card" model="com.axelor.gst.db.Party" title="Parties List" width="100px">
+	<cards name="party_card" model="com.axelor.gst.db.Party" title="Parties List" width="230px">
 		<field name="refrence" />
 		<field name="name" />
-		<field name="type" />
-		<field name="customer" />
-		<field name="supplier" />
 		<field name="gstin" />
-		
 		<template>
 			<![CDATA[
 				<div class="span-4">
-					<strong>{{refrence}}</strong>
-					<strong>{{name}}</strong>
-					<strong>{{type}}</strong>
-					<strong>{{customer}}</strong>
-					<strong>{{supplier}}</strong>
-					<strong>{{gstin}}</strong>
+					<table>
+						<tr>
+							<td>Reference</td>
+							<td><strong>:&nbsp;{{refrence}}</strong></td>
+						</tr>
+						<tr>
+							<td>Name</td>
+							<td><strong>:&nbsp;{{name}}</strong></td>
+						</tr>
+						<tr>
+							<td>GSTIN</td>
+							<td><strong>:&nbsp;{{gstin}}</strong></td>
+						</tr>
+					</table>
 				</div> 
 			]]>
 		</template>
@@ -29,44 +33,49 @@
 		<field name="refrence" />
 		<field name="name" />
 		<field name="type" />
+		<field name="gstin" />
 		<field name="customer" />
 		<field name="supplier" />
-		<field name="gstin" />
 	</grid>
 	
-	<form model="com.axelor.gst.db.Party" title="Party" name="party_form" onSave="action-add-sequence">
-		<panel name="mainPanel">
+	<form model="com.axelor.gst.db.Party" title="Party" name="party_form" onSave="action-add-sequence" css="panel-blue">
+		<panel name="mainPanel" title="Party information">
 			<field name="refrence" />
 			<field name="name" />
 			<field name="type" />
+			<field name="gstin" />
 			<field name="customer" />
 			<field name="supplier" />
-			<field name="gstin" />
-<!-- 			<field name="contact" widget="editor" /> -->
-				<field name="contact" colSpan="12">
-					<editor>
-				  		<field name="name" />
-				  		<field name="type" />
-				  		<field name="primeryEmail" />
-				  		<field name="secondaryEmail" />
-				  		<field name="primeryPhone" />
-				  		<field name="secondaryPhone" />
-				</editor>
-			</field>
-			
-			<field name="address" colSpan="12">
-				<editor x-viewer="true">
-					<field name="type" />
-					<field name="line1" />
-					<field name="line2" />
-					<field name="city" />
-					<field name="state" />
-					<field name="country" />
-					<field name="pinCode" />
-				</editor>
-			</field>
-							
-		</panel>
+			</panel>
+			<panel-tabs name="panelTab" >
+				<panel name="contactPanel" title="Contact">
+					<label name="contactList" title="Contact List" colSpan="12"/>
+					<field name="contact" colSpan="12" showTitle="false">
+						<editor>
+					  		<field name="name" />
+					  		<field name="type" />
+					  		<field name="primeryEmail" />
+					  		<field name="secondaryEmail" />
+					  		<field name="primeryPhone" />
+					  		<field name="secondaryPhone" />
+						</editor>
+					</field>		
+				</panel>
+				<panel name="addressPanel" title="Address">
+					<label name="address" title="Address" colSpan="12" />
+					<field name="address" colSpan="12" showTitle="false">
+						<editor x-viewer="true">
+							<field name="type" />
+							<field name="line1" />
+							<field name="line2" />
+							<field name="city" />
+							<field name="state" />
+							<field name="country" />
+							<field name="pinCode" />
+						</editor>
+					</field>					
+				</panel>
+			</panel-tabs>
 	</form>
 	<action-method name="action-add-sequence" model="com.axelor.gst.db.Party">
 		<call class="com.axelor.gst.web.PartyController" method="setPartSequence"/>

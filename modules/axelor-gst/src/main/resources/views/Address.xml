@@ -11,8 +11,8 @@
 		<field name="pinCode" />
 	</grid>
 	
-	<form model="com.axelor.gst.db.Address" title="Address" name="address_form">
-		<panel name="mainPanle" >
+	<form model="com.axelor.gst.db.Address" title="Address" name="address_form" css="panel-green">
+		<panel name="mainPanle" title="Address">
 			<field name="type" />
 			<field name="line1" />
 			<field name="line2" />

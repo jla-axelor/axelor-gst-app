@@ -9,8 +9,8 @@
 		<field name="gstRate" />
 	</grid>
 	
-	<form model="com.axelor.gst.db.ProductCategory" title="Product Category" name="category_form">
-		<panel name="mainPanel">
+	<form model="com.axelor.gst.db.ProductCategory" title="Product Category" name="category_form" css="panel-blue">
+		<panel name="mainPanel" title="Product category">
 			<field name="name" />
 			<field name="code" />
 			<field name="gstRate" />
