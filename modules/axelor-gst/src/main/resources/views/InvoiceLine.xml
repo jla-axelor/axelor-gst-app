@@ -7,13 +7,13 @@
 		<field name="product" />
 		<field name="HSBN" />
 		<field name="item" />
-		<field name="quentity" />
+		<field name="quantity" />
 		<field name="price" />
 		<field name="netAmount" />
 		<field name="gstRate" />
-		<field name="IGST" />
-		<field name="SGST" />
-		<field name="CGST" />
+		<field name="IGST" title="IGST" />
+		<field name="SGST" title="SGST" />
+		<field name="CGST" title="CGST" />
 		<field name="grossAmount" />
 	</grid>
 	
@@ -22,13 +22,13 @@
 			<field name="product" onChange="action-compy-product-name-code" />
 			<field name="HSBN" title="HSBN" />
 			<field name="item" />
-			<field name="quentity" onChange="action-caculate-net-amount ,action-set-values" />
+			<field name="quantity" onChange="action-caculate-net-amount ,action-set-values" />
 			<field name="price"  onChange="action-caculate-net-amount ,action-set-values"/>
 			<field name="netAmount" />
 			<field name="gstRate" />
-			<field name="IGST" />
-			<field name="SGST" />
-			<field name="CGST" />
+			<field name="IGST" title="IGST" />
+			<field name="SGST" title="SGST" />
+			<field name="CGST" title="CGST" />
 			<field name="grossAmount" />
 		</panel>
 	</form>	
@@ -37,7 +37,7 @@
 		<field name="gstRate" expr="eval: product.gstRate"/>
 	</action-record>
 	<action-record name="action-caculate-net-amount" model="com.axelor.gst.db.InvoiceLine">
-		<field name="netAmount" expr="eval: (quentity * price)"/>
+		<field name="netAmount" expr="eval: (quantity * price)"/>
 	</action-record>
 	
 	<action-method name="action-set-values" model="com.axelor.gst.db.Invoice">

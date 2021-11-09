@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 	
 	<cards name="party_card" model="com.axelor.gst.db.Party" title="Parties List" width="230px">
-		<field name="refrence" />
+		<field name="reference" />
 		<field name="name" />
 		<field name="gstin" />
 		<template>
@@ -30,7 +30,7 @@
 	</cards>
 	
 	<grid model="com.axelor.gst.db.Party" title="Parties" name="party_grid">
-		<field name="refrence" />
+		<field name="reference" />
 		<field name="name" />
 		<field name="type" />
 		<field name="gstin" />
@@ -40,7 +40,7 @@
 	
 	<form model="com.axelor.gst.db.Party" title="Party" name="party_form" onSave="action-add-sequence" css="panel-blue">
 		<panel name="mainPanel" title="Party information">
-			<field name="refrence" />
+			<field name="reference" />
 			<field name="name" />
 			<field name="type" />
 			<field name="gstin" />

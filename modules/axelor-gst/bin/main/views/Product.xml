@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
   
-  	<cards name="product_card" model="com.axelor.gst.db.Product" title="Products" >
+  	<cards name="product_card" model="com.axelor.gst.db.Product" title="Products" width="400px">
   		<field name="name" />
 		<field name="image" />
 		<field name="code" />
@@ -16,7 +16,7 @@
 				<img ng-src="{{$image(null, 'image')}}" ng-if="hasImage">
 				<strong>{{name}}</strong>
 			</div>
-			<div class = "span8">
+			<div class = "span4">
 				<table>
 						<tr>
 							<td>Code</td>
@@ -65,16 +65,19 @@
 			<field name="gstRate" />
 		</panel>
 	</form>
-	
+		
 	<action-record name="action-onchange-category-gstrate" model="com.axelor.gst.db.Product" >
 		<field name="gstRate" expr="eval: category.gstRate"/>
 	</action-record>
 	<action-report 
 		output="PR-${date}" 
 		name="action-product-genrate-product" 
-		design="product.rptdesign"></action-report>
+		design="product.rptdesign">
+			<param name="productId" expr="eval: org.apache.commons.lang.StringUtils.join(__ids__, &quot;,&quot;)"/>
+		</action-report>
+			
 	<action-view name="action-product-create-invoice" title="Invoice" model="com.axelor.gst.db.Invoice">
 		<view type="form" name="invoice_form" />
-		<context name="_id" expr="eval: __ids__"/>
+		<context name="_id" expr="eval: __ids__ != null ? __ids__ : 'empty'" />
 	</action-view>
 </object-views>

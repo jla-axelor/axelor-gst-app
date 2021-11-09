@@ -1,5 +1,9 @@
 package com.axelor.gst.web;
 
+import java.util.NoSuchElementException;
+
+import com.axelor.common.StringUtils;
+import com.axelor.gst.db.Party;
 import com.axelor.gst.service.SequenceService;
 import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
@@ -9,12 +13,15 @@ public class PartyController {
 	
 	public void setPartSequence(ActionRequest req , ActionResponse res) {
 		String model = "com.axelor.gst.db.Party";
-		String sequence = Beans.get(SequenceService.class).setSequence(model);
-		if(sequence.equals(null)) {
-			res.setError("Please set Sequence for party");
+		try {
+		if(StringUtils.isEmpty((req.getContext().asType(Party.class).getReference()))) {
+			String sequence = Beans.get(SequenceService.class).setSequence(model);
+			if(!sequence.equals(null))
+				res.setValue("reference", sequence);
 		}
-		else {
-			res.setValue("refrence", sequence);
+		}
+		catch (NoSuchElementException e) {
+			res.setError("Please set Sequence for party");
 		}
 	}
 }

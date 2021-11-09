@@ -1,18 +1,23 @@
 package com.axelor.gst.web;
 
-import java.util.List;
-
-import com.axelor.gst.db.Contact;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
+import com.axelor.common.StringUtils;
 import com.axelor.gst.db.Address;
+import com.axelor.gst.db.Contact;
 import com.axelor.gst.db.Invoice;
 import com.axelor.gst.db.InvoiceLine;
+import com.axelor.gst.db.Party;
 import com.axelor.gst.db.Product;
-import com.axelor.gst.db.repo.InvoiceLineRepository;
 import com.axelor.gst.db.repo.ProductRepository;
 import com.axelor.gst.service.SequenceService;
 import com.axelor.inject.Beans;
+import com.axelor.meta.schema.actions.ActionView;
+import com.axelor.meta.schema.actions.ActionView.ActionViewBuilder;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 
@@ -68,24 +73,33 @@ public class InvoiceController {
 	
 	public void setAmount(ActionRequest req , ActionResponse res) {
 		
-		Address invoiceAddress = req.getContext().getParent().asType(Invoice.class).getInvoiceAddress();
-		Address companyAddress = req.getContext().getParent().asType(Invoice.class).getCompany().getAddress();
-		
-		BigDecimal netAmount = req.getContext().asType(InvoiceLine.class).getNetAmount();
-		BigDecimal gstRate =  req.getContext().asType(InvoiceLine.class).getGstRate();
-		
-		BigDecimal two = new BigDecimal(2);
-		
-		BigDecimal sgstAndCgst = (netAmount.add(gstRate)).divide(two);
-		
-		if (!invoiceAddress.equals(companyAddress)) {
-			res.setValue("IGST", (netAmount.add(gstRate)));
-			res.setValue("grossAmount", (netAmount.add(gstRate)).add(netAmount));
+		try {
+			if(!StringUtils.isEmpty(req.getContext().getParent().asType(Invoice.class).getInvoiceAddress().getState().getName()) && 
+				!StringUtils.isEmpty(req.getContext().getParent().asType(Invoice.class).getCompany().getAddress().getState().getName())) {
+					
+				String invoiceAddressStateName = req.getContext().getParent().asType(Invoice.class).getInvoiceAddress().getState().getName();
+				String companyAddressStateName = req.getContext().getParent().asType(Invoice.class).getCompany().getAddress().getState().getName();
+				
+				BigDecimal netAmount = req.getContext().asType(InvoiceLine.class).getNetAmount();
+				BigDecimal gstRate =  req.getContext().asType(InvoiceLine.class).getGstRate();
+				
+				BigDecimal two = new BigDecimal(2);
+				
+				BigDecimal sgstAndCgst = (netAmount.add(gstRate)).divide(two);
+				
+				if (!(invoiceAddressStateName).equals(companyAddressStateName)) {
+					res.setValue("IGST", (netAmount.add(gstRate)));
+					res.setValue("grossAmount", (netAmount.add(gstRate)).add(netAmount));
+				}
+				else {
+					res.setValue("SGST", sgstAndCgst);	
+					res.setValue("CGST", sgstAndCgst);
+					res.setValue("grossAmount", sgstAndCgst.add(netAmount));
+				}
+			}
 		}
-		else {
-			res.setValue("SGST", sgstAndCgst);	
-			res.setValue("CGST", sgstAndCgst);
-			res.setValue("grossAmount", sgstAndCgst.add(netAmount));
+		catch(NullPointerException e) {
+				res.setError("State of address is null");
 		}
 	}
 	
@@ -112,30 +126,51 @@ public class InvoiceController {
 	
 	public void setSequence(ActionRequest req , ActionResponse res) {
 		if (req.getContext().asType(Invoice.class).getStatus().equals("2")) {
-			
 			String model = "com.axelor.gst.db.Invoice";
-			String sequence = Beans.get(SequenceService.class).setSequence(model);
-			if(sequence.equals(null)) {
-				res.setError("Please set Sequence for Invoice");
+			try {
+				if(StringUtils.isEmpty((req.getContext().asType(Invoice.class).getReference()))) {
+					String sequence = Beans.get(SequenceService.class).setSequence(model);
+					if(!sequence.equals(null))
+						res.setValue("reference", sequence);
+				}
 			}
-			else {
-				res.setValue("refrence", sequence);
+			catch (NoSuchElementException e) {
+				res.setFlash("Please set Sequence for Invoice");
+				res.setValue("status", "1");
 			}
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void setSelectedProduct(ActionRequest req , ActionResponse res) {
-		List<Integer> productids =(List<Integer>)req.getContext().get("_id");
-		if(!productids.equals(null)) {
-			for(Integer i : productids) {
-			Long l = new Long(i);	
-			Product product = Beans.get(ProductRepository.class).find(l);
-//			Beans.get(InvoiceLineRepository.class).all().fetch();
-//			res.set
-//			res.setValue(, productids);
-				System.err.println(product.getName());
+		List<Integer> productids = new ArrayList<>();
+		try {
+			if(req.getContext().get("_id").equals("empty")) {
+//				ActionViewBuilder actionViewBuilder = ActionView.define("Product").model(Product.class.getName()).add("grid","product_grid");
+//				res.setView(actionViewBuilder.map());
+//				res.setCanClose(true);
+				res.setError("Please select Product");
+			}
+			else {
+			productids = (List<Integer>)req.getContext().get("_id");
+			System.err.println(productids.stream().map(String::valueOf).collect(Collectors.joining(",")));
+			if(!productids.equals(null)) {
+				List<InvoiceLine> lines = new ArrayList<>();
+				for(Integer i : productids) {
+				Long l = new Long(i);	
+				Product product = Beans.get(ProductRepository.class).find(l);
+				InvoiceLine line = new InvoiceLine();
+				line.setProduct(product);
+				lines.add(line);
+				res.setValue("invoiceItem", lines);
+				}
+			}
 			}
 		}
+		catch (NullPointerException e) {
+			System.err.println("Product is null");
+		}
+		
 	}
 	
 }

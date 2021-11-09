@@ -6,7 +6,7 @@
 		<module package="com.axelor.gst.db" name="gst"/>
 		<entity name="Invoice">
 			<string name="status" readonly="true" selection="gst-invoice-status" default="1" />
-			<string name="refrence"  readonly="true"/>
+			<string name="reference"  readonly="true"/>
 
 			<datetime name="invoiceDate" />
 
@@ -35,7 +35,7 @@
 			<string name="HSBN" />
 			<string name="item" required="true" />
 			
-			<integer name="quentity" />
+			<integer name="quantity" />
 			
 			<decimal name="price" default="1" />
 			<decimal name="netAmount" readonly="true" />
