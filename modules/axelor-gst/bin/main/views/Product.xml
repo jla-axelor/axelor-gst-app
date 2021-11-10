@@ -38,8 +38,8 @@
 	
 	<grid model="com.axelor.gst.db.Product" title="Products" name="product_grid">
 		<toolbar>
-			<button onClick="action-product-genrate-product" name="printProduct" icon="fa-print"/>
-			<button onClick="action-product-create-invoice" name="creteinvoice" title="Create invoice"/>
+			<button onClick="action-product-validate-create-invoice-btn,action-product-genrate-product" name="printProduct" icon="fa-print"/>
+			<button onClick="acction-group-create-invoice-part" name="creteinvoice" title="Create invoice"/>
 		</toolbar>
 		<field name="name" />
 		<field name="image" />
@@ -76,8 +76,17 @@
 			<param name="productId" expr="eval: org.apache.commons.lang.StringUtils.join(__ids__, &quot;,&quot;)"/>
 		</action-report>
 			
-	<action-view name="action-product-create-invoice" title="Invoice" model="com.axelor.gst.db.Invoice">
+	<action-view name="action-product-create-invoice" title="Invoice" model="com.axelor.gst.db.Invoice" >
 		<view type="form" name="invoice_form" />
-		<context name="_id" expr="eval: __ids__ != null ? __ids__ : 'empty'" />
+		<context name="_id" expr="eval: __ids__" if="__ids__ != null" />
 	</action-view>
+	<action-validate name="action-validate-selected-product" model="com.axelor.gst.db.Product" >
+		<error message="Please select product" if="__ids__ == null"/>
+	</action-validate>
+	
+	<action-group name="acction-group-create-invoice-part" model="com.axelor.gst.db.Product">
+		<action name="action-validate-selected-product"/>
+		<action name="action-product-create-invoice" if="__ids__ != null" />
+	</action-group>
+
 </object-views>

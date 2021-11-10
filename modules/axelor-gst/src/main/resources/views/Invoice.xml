@@ -14,7 +14,7 @@
 			<![CDATA[
 			<table>
 				<tr>
-					<strong>{{refrence}}</strong><br/>
+					<strong>{{reference}}</strong><br/>
 				</tr>
 				
 				<strong>{{invoiceDate}}</strong><br/>
@@ -27,7 +27,7 @@
   	</kanban>
 	
 	<grid model="com.axelor.gst.db.Invoice" title="Invoices" name="invoice_grid">
-		<field name="refrence" />
+		<field name="reference" />
 		<field name="status" />
 		<field name="invoiceDate"/>
 		<field name="company" />
@@ -35,10 +35,10 @@
 		<field name="grossAmount" />
 	</grid>
 	
-	<form model="com.axelor.gst.db.Invoice" title="Invoice" name="invoice_form" onNew="action-on-new-date-time,action-one-new-default-company,action-set-product" 
+	<form model="com.axelor.gst.db.Invoice" title="Invoice" name="invoice_form" onNew="action-group-one-new" 
 					onLoad="action-invoice-hide-button" css="panel-blue">
 	<toolbar>
-		<button onClick="print-invoice" name="print" icon="fa-print" />
+		<button onClick="print-invoice" name="printInvoice" icon="fa-print" hidden="true" showIf="id" />
 	</toolbar>
 	<panel name="mainPanel1" title="Invoice">
 	
@@ -48,14 +48,14 @@
 		<field name="company" />
 		<field name="party" onChange="action-set-party-contact,action-invoiceAdd-as-shippingAdd" />
 		<field name="partyContact" />
-		<field name="invoiceAddress" target-name="line1" />
-		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoiceAdd-as-shippingAdd" widget="boolean-switch"/>
+		<field name="invoiceAddress" target-name="line1" required="true" />
+		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoice-set-error-empty-party" widget="boolean-switch"/>
 		<field name="shippingAddress" target-name="line1" />
 	</panel>
 	
 	<panel name="sidePanel" sidebar="true" title="Status">
 		<button onClick="action-invoice-button-click-draft,action-invoice-hide-button" name="draftBtn" title="Draft" hidden="true"/>
-		<button onClick="action-click-validate,action-set-invoice-refrence,action-invoice-hide-button" name="validateBtn" title="Validate" />
+		<button onClick="action-click-validate,action-set-invoice-refrence,action-invoice-hide-button,save" name="validateBtn" title="Validate" />
 		<button onClick="action-click-paid,action-invoice-hide-button" name="paidBtn" title="Paid" hidden="true" />
 		<button onClick="action-click-Cancelled,action-invoice-hide-button" name="cancelledBtn" title="Cancelled" hidden="true"/>
 	</panel>
@@ -79,7 +79,7 @@
 	</action-record>
 	
 	<action-record name="action-click-validate" model="com.axelor.gst.db.Invoice">
-		<field name="status" expr="eval: 2" />
+		<field name="status" expr="eval: 2" if="invoiceAddress != null" />
 	</action-record>
 	<action-record name="action-click-paid" model="com.axelor.gst.db.Invoice">
 		<field name="status" expr="eval: 3"  />
@@ -91,10 +91,11 @@
 		<field name="status" expr="eval: 1" />
 	</action-record>
 	<action-attrs name="action-invoice-hide-button" model="com.axelor.gst.db.Invoice">
-		<attribute name="hidden" for="paidBtn" expr="eval: status == '2' ? fasle : true"/>
+		<attribute name="hidden" for="paidBtn" expr="eval: status == '2' ? false : true"/>
 		<attribute name="hidden" for="cancelledBtn" expr="eval: status == '2' ? false : true" />
-		<attribute name="hidden" for="validateBtn" expr="eval: status == '2'|| status == '4' || staus == '3' ? true : false"/>
+		<attribute name="hidden" for="validateBtn" expr="eval: status == '1' ? false : true"/>
 		<attribute name="hidden" for="draftBtn" expr="eval: status == '4' ? false : true" />
+<!-- 		<attribute name="hidden" for="printInvoice" expr="eval: status == '1' ? true : false"/> -->
 	</action-attrs>
 	
 	<action-record name="action-one-new-default-company" model="com.axelor.gst.db.Invoice">
@@ -104,18 +105,21 @@
 	<action-method name="action-set-party-contact" model="com.axelor.gst.db.Invoice">
 		<call class="com.axelor.gst.web.InvoiceController" method="setPartyContact"/>
 	</action-method>
-	
-	<action-method name="action-invoiceAdd-as-shippingAdd" model="com.axelor.gst.db.Invoice">
-		<call class="com.axelor.gst.web.InvoiceController" method="setShippingAdd"/>
-	</action-method>
-	
-	
+
 	<action-method name="action-set-invoice-net" model="com.axelor.gst.db.Invoice">
 		<call class="com.axelor.gst.web.InvoiceController" method="setInvoiceNet"/>
 	</action-method>
 	
 	<action-method name="action-set-invoice-refrence" model="com.axelor.gst.db.Invoice">
 		<call class="com.axelor.gst.web.InvoiceController" method="setSequence" />
+	</action-method>
+	
+	<action-method name="action-set-product" model="com.axelor.gst.db.Invoice">
+		<call class="com.axelor.gst.web.InvoiceController" method="setSelectedProduct"/>
+	</action-method>
+	
+	<action-method name="action-invoice-set-error-empty-party" model="com.axelor.gst.db.Invoice">
+		<call class="com.axelor.gst.web.InvoiceController" method="validateButton"/>
 	</action-method>
 	
 	<action-report
@@ -125,9 +129,12 @@
 		<param name="invoiceId" expr="eval: id"/>
 	</action-report>
 	
-	<action-method name="action-set-product" model="com.axelor.gst.db.Invoice">
-		<call class="com.axelor.gst.web.InvoiceController" method="setSelectedProduct"/>
-	</action-method>
+	<action-group name="action-group-one-new" model="com.axelor.gst.db.Invoice">
+		<action name="action-on-new-date-time"/>
+		<action name="action-one-new-default-company"/>
+		<action name="action-set-product" if="__ids__ != null"/>
+	</action-group>
+	
 </object-views>
 
 

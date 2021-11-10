@@ -35,6 +35,7 @@
 	<action-record name="action-compy-product-name-code" model="com.axelor.gst.db.InvoiceLine">
 		<field name="item" expr="eval: product.name+ ':' +product.code"/>
 		<field name="gstRate" expr="eval: product.gstRate"/>
+		<field name="HSBN" expr="eval: product?.HSBN"/>
 	</action-record>
 	<action-record name="action-caculate-net-amount" model="com.axelor.gst.db.InvoiceLine">
 		<field name="netAmount" expr="eval: (quantity * price)"/>

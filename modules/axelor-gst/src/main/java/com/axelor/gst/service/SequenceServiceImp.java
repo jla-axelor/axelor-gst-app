@@ -1,5 +1,6 @@
 package com.axelor.gst.service;
 
+import com.axelor.common.StringUtils;
 import com.axelor.gst.db.Sequence;
 import com.axelor.gst.db.repo.SequenceRepository;
 import com.axelor.inject.Beans;
@@ -12,32 +13,30 @@ public class SequenceServiceImp implements SequenceService{
 	public String setSequence(String model) {
 		SequenceRepository repo = Beans.get(SequenceRepository.class);
 		Sequence s =  repo.all().fetch().stream().filter(i->i.getModel().getFullName().equals(model)).findFirst().get();
-		String SEQUENCE = "";
+		String sequence = "";
 		if (s != null) {
 			
 			String prefix = s.getPrefix();
-			String suffix = s.getSuffix();
+			String suffix = new String("");
+			suffix = s.getSuffix();
 			Integer padding = s.getPadding();
 			Integer incrementOf = s.getIncrementOf();
-			String pad = new String("0");
-			
-			for(int i =0;i<padding-1;i++) {
-				pad = pad+"0";  
-			}
 			Integer nextNumber =Integer.parseInt(s.getNextNumber());
+			String number = String.format("%0"+padding+"d", nextNumber);
 			
-			SEQUENCE = prefix+pad+nextNumber+suffix;
-			 
+			if(!StringUtils.isEmpty(suffix)) {
+				sequence = prefix+number+suffix;
+			}
+			else {
+				sequence = prefix+number;
+			}
+			
 			nextNumber = nextNumber + incrementOf;
 	
 			s.setNextNumber(nextNumber.toString());
 			repo.save(s);
-			
-			 System.err.println(s.getNextNumber());
-			 System.err.println(s.getIncrementOf());
-			 System.err.println(SEQUENCE);
-			 return SEQUENCE;
+			return sequence;
 		}
-		return SEQUENCE;
+		return sequence;
 	}
 }

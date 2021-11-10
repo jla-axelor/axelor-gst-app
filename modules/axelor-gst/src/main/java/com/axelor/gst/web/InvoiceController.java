@@ -2,6 +2,7 @@ package com.axelor.gst.web;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -11,13 +12,10 @@ import com.axelor.gst.db.Address;
 import com.axelor.gst.db.Contact;
 import com.axelor.gst.db.Invoice;
 import com.axelor.gst.db.InvoiceLine;
-import com.axelor.gst.db.Party;
-import com.axelor.gst.db.Product;
-import com.axelor.gst.db.repo.ProductRepository;
+import com.axelor.gst.service.InvoiceService;
+import com.axelor.gst.service.ProductService;
 import com.axelor.gst.service.SequenceService;
 import com.axelor.inject.Beans;
-import com.axelor.meta.schema.actions.ActionView;
-import com.axelor.meta.schema.actions.ActionView.ActionViewBuilder;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 
@@ -99,29 +97,20 @@ public class InvoiceController {
 			}
 		}
 		catch(NullPointerException e) {
-				res.setError("State of address is null");
+				res.setError("State of invoice or company address is not set");
 		}
 	}
 	
 	public void setInvoiceNet(ActionRequest req , ActionResponse res) {
 		List<InvoiceLine> invoiceLines = req.getContext().asType(Invoice.class).getInvoiceItem();
-		BigDecimal netAmount = new BigDecimal("0");
-		BigDecimal netIGST = new BigDecimal("0");
-		BigDecimal netCGST = new BigDecimal("0");
-		BigDecimal netSGST = new BigDecimal("0");
-		BigDecimal grossAmount = new BigDecimal("0");
-		for(InvoiceLine a : invoiceLines) {
-			netSGST = netSGST.add(a.getSGST());	
-			netCGST = netCGST.add(a.getCGST());
-			netIGST = netIGST.add(a.getIGST());
-			netAmount = netAmount.add(a.getNetAmount());
-			grossAmount = grossAmount.add(a.getGrossAmount());
-	}
-		res.setValue("netAmmount", netAmount);
-		res.setValue("netIGST", netIGST);
-		res.setValue("netCSGT", netCGST);
-		res.setValue("netSGST", netSGST);
-		res.setValue("grossAmount", grossAmount);
+
+		List<BigDecimal> newValues = Beans.get(InvoiceService.class).setInvoiceNet(invoiceLines);
+		
+		res.setValue("netAmmount", newValues.get(0));
+		res.setValue("netIGST", newValues.get(1));
+		res.setValue("netCSGT", newValues.get(2));
+		res.setValue("netSGST", newValues.get(3));
+		res.setValue("grossAmount", newValues.get(4));
 	}
 	
 	public void setSequence(ActionRequest req , ActionResponse res) {
@@ -130,8 +119,13 @@ public class InvoiceController {
 			try {
 				if(StringUtils.isEmpty((req.getContext().asType(Invoice.class).getReference()))) {
 					String sequence = Beans.get(SequenceService.class).setSequence(model);
-					if(!sequence.equals(null))
-						res.setValue("reference", sequence);
+				
+					Address invoiceAddress = req.getContext().asType(Invoice.class).getInvoiceAddress();
+						
+					if (!invoiceAddress.equals(null)) {
+						if(!sequence.equals(null))
+							res.setValue("reference", sequence);
+					}
 				}
 			}
 			catch (NoSuchElementException e) {
@@ -143,34 +137,35 @@ public class InvoiceController {
 	
 	@SuppressWarnings("unchecked")
 	public void setSelectedProduct(ActionRequest req , ActionResponse res) {
-		List<Integer> productids = new ArrayList<>();
+		Collection<Integer> productids ;
 		try {
-			if(req.getContext().get("_id").equals("empty")) {
+			if(req.getContext().containsKey("_id")) {
 //				ActionViewBuilder actionViewBuilder = ActionView.define("Product").model(Product.class.getName()).add("grid","product_grid");
 //				res.setView(actionViewBuilder.map());
 //				res.setCanClose(true);
-				res.setError("Please select Product");
+//				res.setError("Please select Product");
+					productids = (Collection<Integer>)req.getContext().get("_id");
+//					System.err.println(productids.stream().map(String::valueOf).collect(Collectors.joining(",")));
+					List<InvoiceLine> lines = Beans.get(ProductService.class).setproduct(productids);
+					System.err.println("Runing... ");
+					res.setValue("invoiceItem", lines);
 			}
-			else {
-			productids = (List<Integer>)req.getContext().get("_id");
-			System.err.println(productids.stream().map(String::valueOf).collect(Collectors.joining(",")));
-			if(!productids.equals(null)) {
-				List<InvoiceLine> lines = new ArrayList<>();
-				for(Integer i : productids) {
-				Long l = new Long(i);	
-				Product product = Beans.get(ProductRepository.class).find(l);
-				InvoiceLine line = new InvoiceLine();
-				line.setProduct(product);
-				lines.add(line);
-				res.setValue("invoiceItem", lines);
-				}
+		}
+		catch(NullPointerException e) {
+			System.err.println("exception running...");
 			}
+		}
+	
+	public void validateButton(ActionRequest req , ActionResponse res) {
+		try {
+			
+			if(!StringUtils.isEmpty(req.getContext().asType(Invoice.class).getParty().getName())) {
+				setShippingAdd(req, res);
 			}
 		}
 		catch (NullPointerException e) {
-			System.err.println("Product is null");
+			res.setError("Please set party");
 		}
-		
 	}
 	
 }
