@@ -12,9 +12,9 @@
 			
 			<many-to-one ref="com.axelor.gst.db.ProductCategory" name="category" />
 			
-			<decimal name="salePrice" />
-			<decimal name="costPrice" />
-			<decimal name="gstRate" />
+			<decimal name="salePrice" min="0" />
+			<decimal name="costPrice" min="0"/>
+			<decimal name="gstRate" min="0" />
 			
 			<binary name="image" />
 		</entity>
@@ -23,7 +23,7 @@
 			<string name="name" required="true" />
 			<string name="code" required="true" />
 			
-			<decimal name="gstRate" />
+			<decimal name="gstRate" min="0"/>
 		</entity>
 		
 </domain-models>

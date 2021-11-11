@@ -13,7 +13,7 @@
 		<panel name="mainPanel" title="Product category">
 			<field name="name" />
 			<field name="code" />
-			<field name="gstRate" />
+			<field name="gstRate" title="Gst Rate(%)" help="Gst Rate is in percentage"/>
 		</panel>
 	</form>
 

@@ -46,18 +46,18 @@
 		<field name="reference" colSpan="12" />
 		<field name="invoiceDate" />
 		<field name="company" />
-		<field name="party" onChange="action-set-party-contact,action-invoiceAdd-as-shippingAdd" />
+		<field name="party" onChange="action-group-party-on-change,save" required="true" />
 		<field name="partyContact" />
-		<field name="invoiceAddress" target-name="line1" required="true" />
-		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoice-set-error-empty-party" widget="boolean-switch"/>
-		<field name="shippingAddress" target-name="line1" />
+		<field name="invoiceAddress" target-name="line1" required="true" onChange="action-invoiceAdd-as-shippingAdd" />
+		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoice-set-error-empty-party,action-invoiceAdd-as-shippingAdd" widget="boolean-switch"/>
+		<field name="shippingAddress" target-name="line1" showIf="!useInvoiceAddressAsShippingAddress" />
 	</panel>
 	
 	<panel name="sidePanel" sidebar="true" title="Status">
-		<button onClick="action-invoice-button-click-draft,action-invoice-hide-button" name="draftBtn" title="Draft" hidden="true"/>
-		<button onClick="action-click-validate,action-set-invoice-refrence,action-invoice-hide-button,save" name="validateBtn" title="Validate" />
-		<button onClick="action-click-paid,action-invoice-hide-button" name="paidBtn" title="Paid" hidden="true" />
-		<button onClick="action-click-Cancelled,action-invoice-hide-button" name="cancelledBtn" title="Cancelled" hidden="true"/>
+		<button onClick="action-invoce-on-click-draft-status,save" name="draftBtn" title="Draft" hidden="true"/>
+		<button onClick="action-invoie-on-click-validated-status,save" name="validateBtn" title="Validate" />
+		<button onClick="action-invoice-on-click-paid-button,save" name="paidBtn" title="Paid" hidden="true" />
+		<button onClick="action-invoice-on-click-cancelled-status,save" name="cancelledBtn" title="Cancelled" hidden="true"/>
 	</panel>
 	
 	<panel name="mainPanel2" title="Amount" sidebar="true">
@@ -82,7 +82,7 @@
 		<field name="status" expr="eval: 2" if="invoiceAddress != null" />
 	</action-record>
 	<action-record name="action-click-paid" model="com.axelor.gst.db.Invoice">
-		<field name="status" expr="eval: 3"  />
+		<field name="status" expr="eval: 3" if="!invoiceItem.isEmpty()"  />
 	</action-record>
 		<action-record name="action-click-Cancelled" model="com.axelor.gst.db.Invoice">
 		<field name="status" expr="eval: 4"  />
@@ -95,6 +95,7 @@
 		<attribute name="hidden" for="cancelledBtn" expr="eval: status == '2' ? false : true" />
 		<attribute name="hidden" for="validateBtn" expr="eval: status == '1' ? false : true"/>
 		<attribute name="hidden" for="draftBtn" expr="eval: status == '4' ? false : true" />
+		<attribute name="hidden" for="sidePanel" expr="true" if="status == '3'"/>
 <!-- 		<attribute name="hidden" for="printInvoice" expr="eval: status == '1' ? true : false"/> -->
 	</action-attrs>
 	
@@ -118,9 +119,21 @@
 		<call class="com.axelor.gst.web.InvoiceController" method="setSelectedProduct"/>
 	</action-method>
 	
-	<action-method name="action-invoice-set-error-empty-party" model="com.axelor.gst.db.Invoice">
-		<call class="com.axelor.gst.web.InvoiceController" method="validateButton"/>
+	<action-method name="action-invoiceAdd-as-shippingAdd" model="com.axelor.gst.db.Invoice">
+		<call class="com.axelor.gst.web.InvoiceController" method="setShippingAdd"/>
 	</action-method>
+	
+	<action-validate name="action-invoice-set-error-empty-party" model="com.axelor.gst.db.Invoice">
+		<error message="Pelase set party" if="party == null "/>
+	</action-validate>
+	
+	<action-method name="action-invoice-set-invoice-item-on-change-party" model="com.axelor.gst.db.Invoice">
+		<call class="com.axelor.gst.web.InvoiceController" method="setInvoiceItemsValues" />
+	</action-method>
+	
+	<action-validate name="action-ivoice-check-invoice-items" model="com.axelor.gst.db.Invoice">
+		<error message="You don't have any invoice items" if="invoiceItem.isEmpty()" />
+	</action-validate>
 	
 	<action-report
 		name="print-invoice" 
@@ -129,10 +142,38 @@
 		<param name="invoiceId" expr="eval: id"/>
 	</action-report>
 	
+	<action-group name="action-group-party-on-change">
+		<action name="action-set-party-contact"/>
+		<action name="action-invoiceAdd-as-shippingAdd"/>
+		<action name="action-invoice-set-invoice-item-on-change-party" />
+	</action-group>
+	
 	<action-group name="action-group-one-new" model="com.axelor.gst.db.Invoice">
 		<action name="action-on-new-date-time"/>
 		<action name="action-one-new-default-company"/>
-		<action name="action-set-product" if="__ids__ != null"/>
+		<action name="action-set-product" if="'_productIds' != null"/>
+	</action-group>
+	
+	<action-group name="action-invoce-on-click-draft-status" model="com.axelor.gst.db.Invoice">
+		<action name="action-invoice-button-click-draft"/>
+		<action name="action-invoice-hide-button"/>
+	</action-group>
+	
+	<action-group name="action-invoie-on-click-validated-status" model="com.axelor.gst.db.Invoice">
+		<action name="action-click-validate"/>
+		<action name="action-set-invoice-refrence"/>
+		<action name="action-invoice-hide-button"/>
+	</action-group>
+	
+	<action-group name="action-invoice-on-click-paid-button" model="com.axelor.gst.db.Invoice">
+		<action name="action-ivoice-check-invoice-items" />
+		<action name="action-click-paid" />
+		<action name="action-invoice-hide-button" if="!invoiceItem.isEmpty()" />
+	</action-group>
+	
+	<action-group name="action-invoice-on-click-cancelled-status" model="com.axelor.gst.db.Invoice">
+		<action name="action-click-Cancelled"/>
+		<action name="action-invoice-hide-button"/>
 	</action-group>
 	
 </object-views>

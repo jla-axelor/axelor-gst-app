@@ -3,11 +3,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 	
-	<grid model="com.axelor.gst.db.InvoiceLine" title="Invoice Line List" name="invoiceLine_grid">
+	<grid model="com.axelor.gst.db.InvoiceLine" title="Invoice Line List" name="invoiceLine_grid" >
 		<field name="product" />
 		<field name="HSBN" />
 		<field name="item" />
-		<field name="quantity" />
+		<field name="quantity"/>
 		<field name="price" />
 		<field name="netAmount" />
 		<field name="gstRate" />
@@ -25,7 +25,7 @@
 			<field name="quantity" onChange="action-caculate-net-amount ,action-set-values" />
 			<field name="price"  onChange="action-caculate-net-amount ,action-set-values"/>
 			<field name="netAmount" />
-			<field name="gstRate" />
+			<field name="gstRate" title="Gst Rate(%)" />
 			<field name="IGST" title="IGST" />
 			<field name="SGST" title="SGST" />
 			<field name="CGST" title="CGST" />
@@ -42,6 +42,6 @@
 	</action-record>
 	
 	<action-method name="action-set-values" model="com.axelor.gst.db.Invoice">
-		<call class="com.axelor.gst.web.InvoiceController" method="setAmount"/>
+		<call class="com.axelor.gst.web.InvoiceLineController" method="setAmountOnNew"/>
 	</action-method>
 </object-views>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 4.9.0.v202111041244</property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.9.0.v202111020802</property>
     <list-property name="propertyBindings">
         <structure>
             <property name="name">queryText</property>
@@ -55,8 +55,8 @@
                 </ex-property>
             </list-property>
             <property name="odaDriverClass">org.postgresql.Driver</property>
-            <property name="odaURL">jdbc:postgresql://localhost:5500/gstdb</property>
-            <property name="odaUser">postgres</property>
+            <property name="odaURL">jdbc:postgresql://localhost:5433/gstdb</property>
+            <property name="odaUser">axelor</property>
             <encrypted-property name="odaPassword" encryptionID="base64">MjUyMg==</encrypted-property>
         </oda-data-source>
     </data-sources>

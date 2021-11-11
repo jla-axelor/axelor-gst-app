@@ -62,7 +62,7 @@
 			<spacer colSpan="12"/>
 			<field name="salePrice" />
 			<field name="costPrice" />
-			<field name="gstRate" />
+			<field name="gstRate" title="Gst Rate(%)" help="Gst Rate is in percentage" />
 		</panel>
 	</form>
 		
@@ -78,7 +78,7 @@
 			
 	<action-view name="action-product-create-invoice" title="Invoice" model="com.axelor.gst.db.Invoice" >
 		<view type="form" name="invoice_form" />
-		<context name="_id" expr="eval: __ids__" if="__ids__ != null" />
+		<context name="_productIds" expr="eval: __ids__" if="__ids__ != null" />
 	</action-view>
 	<action-validate name="action-validate-selected-product" model="com.axelor.gst.db.Product" >
 		<error message="Please select product" if="__ids__ == null"/>

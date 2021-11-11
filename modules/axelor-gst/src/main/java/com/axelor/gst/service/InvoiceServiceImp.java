@@ -1,9 +1,12 @@
 package com.axelor.gst.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.axelor.gst.db.InvoiceLine;
+import com.axelor.inject.Beans;
+import com.google.inject.persist.Transactional;
 
 public class InvoiceServiceImp implements InvoiceService {
 	@Override
@@ -24,4 +27,7 @@ public class InvoiceServiceImp implements InvoiceService {
 		List<BigDecimal> netValues = Arrays.asList(netAmount,netIGST,netCGST,netSGST,grossAmount);
 		return netValues;
 	}
+	
+	
+	
 }

@@ -35,9 +35,9 @@
 			<string name="HSBN" />
 			<string name="item" required="true" />
 			
-			<integer name="quantity" />
+			<integer name="quantity" min="0" default="1" />
 			
-			<decimal name="price" default="1" />
+			<decimal name="price" default="1" min="0"/>
 			<decimal name="netAmount" readonly="true" />
 			<decimal name="gstRate" readonly="true" />
 			<decimal name="IGST" readonly="true" />
