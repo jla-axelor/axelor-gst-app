@@ -7,8 +7,8 @@
 		<entity name="Sequence">
 			<string name="prefix" required="true" />
 			<string name="suffix" title="Suffix" />
-			<string name="nextNumber" title="Next Number" />
-			<integer name="incrementOf" />
+			<string name="nextNumber" title="Next Number" min="0" />
+			<integer name="incrementOf" min="1" />
 			<integer name="padding" title="Padding" min="1" max="10"/>
 			<many-to-one ref="com.axelor.meta.db.MetaModel" name="model" required="true"/>
 		</entity>

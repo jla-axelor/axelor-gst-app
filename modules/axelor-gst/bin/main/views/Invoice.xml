@@ -48,7 +48,7 @@
 		<field name="company" />
 		<field name="party" onChange="action-group-party-on-change,save" required="true" />
 		<field name="partyContact" />
-		<field name="invoiceAddress" target-name="line1" required="true" onChange="action-invoiceAdd-as-shippingAdd" />
+		<field name="invoiceAddress" target-name="line1" required="true" onChange="action-invoiceAdd-as-shippingAdd" domain="self.party.address"  />
 		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoice-set-error-empty-party,action-invoiceAdd-as-shippingAdd" widget="boolean-switch"/>
 		<field name="shippingAddress" target-name="line1" showIf="!useInvoiceAddressAsShippingAddress" />
 	</panel>

@@ -23,12 +23,12 @@ public class InvoiceLineServiceImp implements InvoiceLineService {
 		BigDecimal sgstAndCgst = (netAmount.multiply(gstRate)).divide(new BigDecimal(100)).divide(two);
 		
 		if (!(invoiceAddressStateName).equals(companyAddressStateName)) {
-			BigDecimal IGST =  netAmount.add(gstRate);
-			grossAmount = (netAmount.add(gstRate)).add(netAmount);
+			BigDecimal IGST =  netAmount.multiply(gstRate).divide(new BigDecimal(100));
+			grossAmount = netAmount.add(IGST);
 			amounts = Arrays.asList(IGST,grossAmount);
 		}
 		else {
-			grossAmount = sgstAndCgst.add(netAmount);
+			grossAmount = (sgstAndCgst.multiply(new BigDecimal(2))).add(netAmount);
 			amounts = Arrays.asList(sgstAndCgst,grossAmount);
 		}
 		return amounts;

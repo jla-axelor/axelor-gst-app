@@ -11,7 +11,7 @@
 		<dataset type="jpql">
 			<![CDATA[
 				SELECT 
-					COUNT(self.refrence) AS invoice,
+					COUNT(self.reference) AS invoice,
 					MONTH(self.invoiceDate) AS month,
 					_party.name AS party	
 				 FROM 
@@ -55,7 +55,7 @@
 		<dataset type="jpql">
 			<![CDATA[
 				SELECT 
-					COUNT(self.refrence) AS invoice,
+					COUNT(self.reference) AS invoice,
 					self.status AS status
 				FROM
 					Invoice self
@@ -92,7 +92,7 @@
 		<dataset type="jpql">
 			<![CDATA[
 				SELECT 
-					COUNT(self.refrence) AS invoice ,
+					COUNT(self.reference) AS invoice ,
 					_invoiceItem.product.category.name AS category ,
 					_invoiceItem.product.name AS product
 				FROM 
@@ -119,14 +119,13 @@
 		<dashlet action="invoice.grid" colSpan="12"/>
 	</dashboard>
 	<action-view name="invoice.grid" title="Invoice" model="com.axelor.gst.db.Invoice">
-
 		<view type="grid" />
-		<view type="form"/>
+		<view type="form" />
 
 		<domain>
-				(self.status = '2' OR self.status = '3') 
+				(self.status = '2' AND self.status != '3') 
 			AND
-				self.refrence IS NOT NULL
+				self.reference != null
 			AND
 				month(self.invoiceDate)=month(now())-1
 		</domain>

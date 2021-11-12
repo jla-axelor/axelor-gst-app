@@ -4,11 +4,15 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
 import com.axelor.common.StringUtils;
 import com.axelor.gst.db.Address;
 import com.axelor.gst.db.Contact;
 import com.axelor.gst.db.Invoice;
 import com.axelor.gst.db.InvoiceLine;
+import com.axelor.gst.db.Party;
+import com.axelor.gst.db.repo.PartyRepository;
 import com.axelor.gst.service.InvoiceLineService;
 import com.axelor.gst.service.InvoiceService;
 import com.axelor.gst.service.ProductService;
@@ -84,12 +88,16 @@ public class InvoiceController {
 			try {
 				if (StringUtils.isEmpty((invoiceClass.getReference()))) {
 					String sequence = Beans.get(SequenceService.class).setSequence(model);
+					List<Party> partyList = Beans.get(PartyRepository.class).all().fetch().stream().filter(i->i.getReference().equals(sequence)).collect(Collectors.toList());
+					if(!partyList.isEmpty())
+						res.setError("Reference id is getting repetitive please change from sequence");
+					else {
+						Address invoiceAddress = invoiceClass.getInvoiceAddress();
 
-					Address invoiceAddress = invoiceClass.getInvoiceAddress();
-
-					if (!invoiceAddress.equals(null)) {
-						if (!sequence.equals(null))
-							res.setValue("reference", sequence);
+						if (!invoiceAddress.equals(null)) {
+							if (!sequence.equals(null))
+								res.setValue("reference", sequence);
+						}
 					}
 				}
 			} catch (NoSuchElementException e) {

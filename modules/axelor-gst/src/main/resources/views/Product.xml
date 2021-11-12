@@ -38,7 +38,7 @@
 	
 	<grid model="com.axelor.gst.db.Product" title="Products" name="product_grid">
 		<toolbar>
-			<button onClick="action-product-validate-create-invoice-btn,action-product-genrate-product" name="printProduct" icon="fa-print"/>
+			<button onClick="action-product-print-invoce-and-validate" name="printProduct" icon="fa-print" />
 			<button onClick="acction-group-create-invoice-part" name="creteinvoice" title="Create invoice"/>
 		</toolbar>
 		<field name="name" />
@@ -69,8 +69,9 @@
 	<action-record name="action-onchange-category-gstrate" model="com.axelor.gst.db.Product" >
 		<field name="gstRate" expr="eval: category.gstRate"/>
 	</action-record>
+	
 	<action-report 
-		output="PR-${date}" 
+		output="PR" 
 		name="action-product-genrate-product" 
 		design="product.rptdesign">
 			<param name="productId" expr="eval: org.apache.commons.lang.StringUtils.join(__ids__, &quot;,&quot;)"/>
@@ -83,7 +84,12 @@
 	<action-validate name="action-validate-selected-product" model="com.axelor.gst.db.Product" >
 		<error message="Please select product" if="__ids__ == null"/>
 	</action-validate>
-	
+
+	<action-group name="action-product-print-invoce-and-validate" model="com.axelor.gst.db.Product">
+		<action name="action-validate-selected-product"/>
+		<action name="action-product-genrate-product" if="__ids__ != null" />
+	</action-group>
+		
 	<action-group name="acction-group-create-invoice-part" model="com.axelor.gst.db.Product">
 		<action name="action-validate-selected-product"/>
 		<action name="action-product-create-invoice" if="__ids__ != null" />
