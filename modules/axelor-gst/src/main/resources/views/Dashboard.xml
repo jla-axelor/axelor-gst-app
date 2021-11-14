@@ -5,7 +5,7 @@
 
 	<chart name="validated.invoice.per.customer" title="Validated invoice per customer">
 		<search-fields>
-			<field name="fromDate" type="date" title="From date"/>
+			<field name="fromDate" type="date" title="From date" />
 			<field name="toDate" type="date" title="To date"/>
 		</search-fields>
 		<dataset type="jpql">
@@ -25,7 +25,7 @@
 				 	_party.name		
 			]]>
 		</dataset>
-		<category key="party" type="number" title="Month"/>
+		<category key="month" type="number" title="Month"/>
 		<series key="invoice" type="bar"  title="Invoice"/>
 	</chart>
 	

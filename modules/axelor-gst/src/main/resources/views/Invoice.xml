@@ -42,18 +42,18 @@
 	</toolbar>
 	<panel name="mainPanel1" title="Invoice">
 	
-		<field name="status" widget="NavSelect" colSpan="12" showTitle="false" />
+		<field name="status" widget="NavSelect" colSpan="12" showTitle="false" onChange="action-invoice-on-click-paid-button,save" />
 		<field name="reference" colSpan="12" />
 		<field name="invoiceDate" />
 		<field name="company" />
 		<field name="party" onChange="action-group-party-on-change,save" required="true" />
 		<field name="partyContact" />
-		<field name="invoiceAddress" target-name="line1" required="true" onChange="action-invoiceAdd-as-shippingAdd" domain="self.party.address"  />
+		<field name="invoiceAddress" target-name="line1" required="true" onChange="action-invoiceAdd-as-shippingAdd" />
 		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoice-set-error-empty-party,action-invoiceAdd-as-shippingAdd" widget="boolean-switch"/>
 		<field name="shippingAddress" target-name="line1" showIf="!useInvoiceAddressAsShippingAddress" />
 	</panel>
 	
-	<panel name="sidePanel" sidebar="true" title="Status">
+	<panel name="sidePanel" sidebar="true" title="Status" showIf="status != '3'">
 		<button onClick="action-invoce-on-click-draft-status,save" name="draftBtn" title="Draft" hidden="true"/>
 		<button onClick="action-invoie-on-click-validated-status,save" name="validateBtn" title="Validate" />
 		<button onClick="action-invoice-on-click-paid-button,save" name="paidBtn" title="Paid" hidden="true" />
@@ -75,7 +75,7 @@
 	</form>
 	
 	<action-record name="action-on-new-date-time" model="com.axelor.gst.db.Invoice">
-		<field name="invoiceDate" expr="eval: __date__"/>
+		<field name="invoiceDate" expr="eval: __datetime__"/>
 	</action-record>
 	
 	<action-record name="action-click-validate" model="com.axelor.gst.db.Invoice">
@@ -95,7 +95,7 @@
 		<attribute name="hidden" for="cancelledBtn" expr="eval: status == '2' ? false : true" />
 		<attribute name="hidden" for="validateBtn" expr="eval: status == '1' ? false : true"/>
 		<attribute name="hidden" for="draftBtn" expr="eval: status == '4' ? false : true" />
-		<attribute name="hidden" for="sidePanel" expr="true" if="status == '3'"/>
+<!-- 		<attribute name="hidden" for="sidePanel" expr="true" if="status == '3'"/> -->
 <!-- 		<attribute name="hidden" for="printInvoice" expr="eval: status == '1' ? true : false"/> -->
 	</action-attrs>
 	
@@ -132,7 +132,7 @@
 	</action-method>
 	
 	<action-validate name="action-ivoice-check-invoice-items" model="com.axelor.gst.db.Invoice">
-		<error message="You don't have any invoice items" if="invoiceItem.isEmpty()" />
+		<error message="You don't have any invoice items"  />
 	</action-validate>
 	
 	<action-report
@@ -166,7 +166,7 @@
 	</action-group>
 	
 	<action-group name="action-invoice-on-click-paid-button" model="com.axelor.gst.db.Invoice">
-		<action name="action-ivoice-check-invoice-items" />
+		<action name="action-ivoice-check-invoice-items" if="invoiceItem.isEmpty()" />
 		<action name="action-click-paid" />
 		<action name="action-invoice-hide-button" if="!invoiceItem.isEmpty()" />
 	</action-group>
