@@ -38,7 +38,7 @@
 		<field name="supplier" />
 	</grid>
 	
-	<form model="com.axelor.gst.db.Party" title="Party" name="party_form" onSave="action-add-sequence" css="panel-blue">
+	<form model="com.axelor.gst.db.Party" title="Party" name="party_form" onSave="action-add-sequence,action-test" css="panel-blue">
 		<panel name="mainPanel" title="Party information">
 			<field name="reference" />
 			<field name="name" />
@@ -80,4 +80,9 @@
 	<action-method name="action-add-sequence" model="com.axelor.gst.db.Party">
 		<call class="com.axelor.gst.web.PartyController" method="setPartSequence"/>
 	</action-method>
+
+	<action-method name="action-test" model="com.axelor.gst.db.Party">
+		<call class="com.axelor.gst.web.PartyController" method="setpartyInAddress"/>
+	</action-method>
+	
 </object-views>

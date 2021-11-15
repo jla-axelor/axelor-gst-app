@@ -48,7 +48,7 @@
 		<field name="company" />
 		<field name="party" onChange="action-group-party-on-change,save" required="true" />
 		<field name="partyContact" />
-		<field name="invoiceAddress" target-name="line1" required="true" onChange="action-invoiceAdd-as-shippingAdd" />
+		<field name="invoiceAddress" x-bind="party.address"   target-name="line1" required="true" onChange="action-invoiceAdd-as-shippingAdd" />
 		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoice-set-error-empty-party,action-invoiceAdd-as-shippingAdd" widget="boolean-switch"/>
 		<field name="shippingAddress" target-name="line1" showIf="!useInvoiceAddressAsShippingAddress" />
 	</panel>
@@ -73,6 +73,10 @@
 	</panel>
 
 	</form>
+	
+	<action-record name="action-test" model="com.axelor.gst.db.Invoice">
+		<field name="invoiceAddress" expr="eval: party.address.collect{i->i.id}"/>
+	</action-record>
 	
 	<action-record name="action-on-new-date-time" model="com.axelor.gst.db.Invoice">
 		<field name="invoiceDate" expr="eval: __datetime__"/>

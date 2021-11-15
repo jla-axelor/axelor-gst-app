@@ -12,6 +12,7 @@
 			<many-to-one ref="com.axelor.gst.db.City" name="city" required="true" />
 			<many-to-one ref="com.axelor.gst.db.State" name="state" />
 			<many-to-one ref="com.axelor.gst.db.Country" name="country" required="true" />
+			<many-to-one ref="com.axelor.gst.db.Party" name="party" />
 			<string name="pinCode" />
 			
 		</entity>

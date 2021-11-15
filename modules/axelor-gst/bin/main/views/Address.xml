@@ -16,10 +16,14 @@
 			<field name="type" />
 			<field name="line1" />
 			<field name="line2" />
-			<field name="city" />
-			<field name="state" />
-			<field name="country" />
+			<field name="city" onChange="action-address-fill-state-and-country" />
+			<field name="state" readonly="true" />
+			<field name="country" readonly="true" />
 			<field name="pinCode" />
 		</panel>
 	</form>
+	
+	<action-method name="action-address-fill-state-and-country" model="com.axelor.gst.db.Address">
+		<call class="com.axelor.gst.web.AddressContoller" method="setStateAndCountry"/>
+	</action-method>
 </object-views>

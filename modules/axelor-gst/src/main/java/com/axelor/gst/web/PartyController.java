@@ -5,12 +5,14 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import com.axelor.common.StringUtils;
+import com.axelor.gst.db.Address;
 import com.axelor.gst.db.Party;
 import com.axelor.gst.db.repo.PartyRepository;
 import com.axelor.gst.service.SequenceService;
 import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
+import com.google.inject.persist.Transactional;
 
 public class PartyController {
 	
@@ -31,5 +33,13 @@ public class PartyController {
 		catch (NoSuchElementException e) {
 			res.setError("Please set Sequence for party");
 		}
+	}
+
+	public void setpartyInAddress(ActionRequest req,ActionResponse res) {
+		List<Address> addressList = req.getContext().asType(Party.class).getAddress();
+		Party party = req.getContext().asType(Party.class);
+		for(Address a : addressList) {
+			a.setParty(party);
+		}	
 	}
 }

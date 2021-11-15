@@ -17,6 +17,9 @@
 			<many-to-one ref="com.axelor.gst.db.Company" name="company" required="true" />
 			<many-to-one ref="com.axelor.gst.db.Party" name="party" />
 			<many-to-one ref="com.axelor.gst.db.Contact" name="partyContact" />
+			<![CDATA[
+			List<Address> invoiceAddress = party.getAddress();
+			]]>
 			<many-to-one ref="com.axelor.gst.db.Address" name="invoiceAddress" />
 			<many-to-one ref="com.axelor.gst.db.Address" name="shippingAddress" />
 			
