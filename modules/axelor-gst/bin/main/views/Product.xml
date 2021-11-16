@@ -52,6 +52,9 @@
 	</grid>
 	
 	<form model="com.axelor.gst.db.Product" title="Product" name="product_from" css="panel-blue">
+		<toolbar>
+			<button onClick="action-produt-product-print" name="printFormProduct" icon="fa-print" />
+		</toolbar>
 		<panel name="mainPanel" title="Product">
 			<field name="image" widget="Image" colSpan="12"/>
 			<spacer colSpan="12"/>
@@ -77,6 +80,12 @@
 			<param name="productId" expr="eval: org.apache.commons.lang.StringUtils.join(__ids__, &quot;,&quot;)"/>
 		</action-report>
 			
+	<action-report output="PR"
+	 name="action-produt-product-print" 
+	 design="product.rptdesign">
+	 	<param name="productId" expr="eval: org.apache.commons.lang.StringUtils.join(Arrays.asList(id), &quot;,&quot;)"/>
+	 </action-report>
+	
 	<action-view name="action-product-create-invoice" title="Invoice" model="com.axelor.gst.db.Invoice" >
 		<view type="form" name="invoice_form" />
 		<context name="_productIds" expr="eval: __ids__" if="__ids__ != null" />

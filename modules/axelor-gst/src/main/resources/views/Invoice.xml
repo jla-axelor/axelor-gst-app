@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
   
-  	<kanban columnBy="status" model="com.axelor.gst.db.Invoice" sequenceBy="priority" title="Invoice" name="invoice_kanban">
+  	<kanban columnBy="status" model="com.axelor.gst.db.Invoice" sequenceBy="priority" title="Invoice" name="invoice_kanban" onMove="action-set-invoice-refrence">
   		<field name="reference" />
 		<field name="invoiceDate" />
 		<field name="company" />
@@ -42,13 +42,13 @@
 	</toolbar>
 	<panel name="mainPanel1" title="Invoice">
 	
-		<field name="status" widget="NavSelect" colSpan="12" showTitle="false" onChange="action-invoice-on-click-paid-button,save" />
+		<field name="status" widget="NavSelect" colSpan="12" showTitle="false" />
 		<field name="reference" colSpan="12" />
 		<field name="invoiceDate" />
 		<field name="company" />
 		<field name="party" onChange="action-group-party-on-change,save" required="true" />
 		<field name="partyContact" />
-		<field name="invoiceAddress" x-bind="party.address"   target-name="line1" required="true" onChange="action-invoiceAdd-as-shippingAdd" />
+		<field name="invoiceAddress" onSelect="action-invoice-filter-invoice-address" target-name="line1"  required="true" onChange="action-invoiceAdd-as-shippingAdd" /><!-- domain="self.party.id = :party.id" -->
 		<field name="useInvoiceAddressAsShippingAddress" onChange="action-invoice-set-error-empty-party,action-invoiceAdd-as-shippingAdd" widget="boolean-switch"/>
 		<field name="shippingAddress" target-name="line1" showIf="!useInvoiceAddressAsShippingAddress" />
 	</panel>
@@ -68,11 +68,20 @@
 		<field name="grossAmount" title="Gross Amount"/>
 	</panel>
 	
-	<panel name="invoiceLinePanle" title="Invoice items">
+	<panel name="invoiceLinePanle" title="Invoice items" showTitle="false">
 		<panel-related field="invoiceItem" colSpan="12" onChange="action-set-invoice-net" />
 	</panel>
 
 	</form>
+	
+<!-- 	<action-attrs name="action-invoice-filter-invoice-address" model="com.axelor.gst.db.Invoice"> -->
+<!-- 		<attribute name="domain" for="invoiceAddress" expr="eval: &quot; self.id IN (${party?.getAddress()?.map(i->i.getId()).collect(Collectors.toList())}) &quot;"/> -->
+<!-- 	</action-attrs> -->
+
+	
+	<action-method name="action-invoice-filter-invoice-address">
+		<call class="com.axelor.gst.web.InvoiceController" method="filterInvoiceAddress"/>
+	</action-method>
 	
 	<action-record name="action-test" model="com.axelor.gst.db.Invoice">
 		<field name="invoiceAddress" expr="eval: party.address.collect{i->i.id}"/>
@@ -99,8 +108,7 @@
 		<attribute name="hidden" for="cancelledBtn" expr="eval: status == '2' ? false : true" />
 		<attribute name="hidden" for="validateBtn" expr="eval: status == '1' ? false : true"/>
 		<attribute name="hidden" for="draftBtn" expr="eval: status == '4' ? false : true" />
-<!-- 		<attribute name="hidden" for="sidePanel" expr="true" if="status == '3'"/> -->
-<!-- 		<attribute name="hidden" for="printInvoice" expr="eval: status == '1' ? true : false"/> -->
+		<attribute name="readonly" for="invoiceItem" expr="true" if="status == '3'"/>
 	</action-attrs>
 	
 	<action-record name="action-one-new-default-company" model="com.axelor.gst.db.Invoice">
@@ -135,8 +143,8 @@
 		<call class="com.axelor.gst.web.InvoiceController" method="setInvoiceItemsValues" />
 	</action-method>
 	
-	<action-validate name="action-ivoice-check-invoice-items" model="com.axelor.gst.db.Invoice">
-		<error message="You don't have any invoice items"  />
+	<action-validate name="action-invoice-check-invoice-items" model="com.axelor.gst.db.Invoice">
+		<error message="You don't have any invoice items" if="status == '2' &amp;&amp; invoiceItem.isEmpty()"  />
 	</action-validate>
 	
 	<action-report
@@ -170,7 +178,7 @@
 	</action-group>
 	
 	<action-group name="action-invoice-on-click-paid-button" model="com.axelor.gst.db.Invoice">
-		<action name="action-ivoice-check-invoice-items" if="invoiceItem.isEmpty()" />
+		<action name="action-invoice-check-invoice-items" />
 		<action name="action-click-paid" />
 		<action name="action-invoice-hide-button" if="!invoiceItem.isEmpty()" />
 	</action-group>
@@ -180,6 +188,12 @@
 		<action name="action-invoice-hide-button"/>
 	</action-group>
 	
+	<action-group name="action-group-change-staus" model="com.axelor.gst.db.Invoice">
+		<action name="action-invoie-on-click-validated-status"/>
+		<action name="action-invoice-on-click-paid-button"/>
+		<action name="action-invoice-on-click-cancelled-status"/>
+		<action name="action-invoce-on-click-draft-status"/>
+	</action-group>
 </object-views>
 
 

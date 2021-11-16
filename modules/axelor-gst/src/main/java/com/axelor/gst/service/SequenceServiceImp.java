@@ -1,11 +1,7 @@
 package com.axelor.gst.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.axelor.common.StringUtils;
 import com.axelor.gst.db.Sequence;
-import com.axelor.gst.db.repo.PartyRepository;
 import com.axelor.gst.db.repo.SequenceRepository;
 import com.axelor.inject.Beans;
 import com.google.inject.persist.Transactional;

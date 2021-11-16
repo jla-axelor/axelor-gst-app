@@ -123,7 +123,7 @@
 		<view type="form" />
 
 		<domain>
-				(self.status = '2' AND self.status != '3') 
+				self.status != '3' 
 			AND
 				self.reference != null
 			AND

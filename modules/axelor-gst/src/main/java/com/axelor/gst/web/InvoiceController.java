@@ -11,8 +11,6 @@ import com.axelor.gst.db.Address;
 import com.axelor.gst.db.Contact;
 import com.axelor.gst.db.Invoice;
 import com.axelor.gst.db.InvoiceLine;
-import com.axelor.gst.db.Party;
-import com.axelor.gst.db.repo.PartyRepository;
 import com.axelor.gst.service.InvoiceLineService;
 import com.axelor.gst.service.InvoiceService;
 import com.axelor.gst.service.ProductService;
@@ -26,12 +24,14 @@ public class InvoiceController {
 	public void setPartyContact(ActionRequest req, ActionResponse res) {
 		List<Contact> contacts = req.getContext().asType(Invoice.class).getParty().getContact();
 		List<Address> addresses = req.getContext().asType(Invoice.class).getParty().getAddress();
+
 		for (Contact c : contacts) {
 			if (c.getType().toString().equals("1")) {
 				res.setValue("partyContact", c);
 				break;
 			}
 		}
+		if (!addresses.isEmpty()) {
 		for (Address a : addresses) {
 			if (a.getType().toString().equals("1")) {
 				res.setValue("invoiceAddress", a);
@@ -40,6 +40,10 @@ public class InvoiceController {
 				res.setValue("invoiceAddress", a);
 				break;
 			}
+		}
+		}
+		else {
+			res.setValue("invoiceAddress", null);
 		}
 	}
 
@@ -131,6 +135,11 @@ public class InvoiceController {
 			
 			setInvoiceNet(req, res);
 		}
+	}
+	public void filterInvoiceAddress(ActionRequest req , ActionResponse res) {
+			List<Long> addressList =  req.getContext().asType(Invoice.class).getParty().getAddress().stream().map(i->i.getId()).collect(Collectors.toList());
+			String listStr = org.apache.commons.lang.StringUtils.join(addressList, ",");
+			res.setAttr("invoiceAddress", "domain" ,"self.id IN"+ "("+listStr+")");
 	}
 
 }
